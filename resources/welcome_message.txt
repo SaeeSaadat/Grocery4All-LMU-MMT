@@ -6,3 +6,4 @@
                                |___/
 Welcome to your new inventory booking system.
   You may use the `help` command to get a list of available commands.
+
