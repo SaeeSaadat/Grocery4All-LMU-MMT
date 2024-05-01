@@ -1,0 +1,8 @@
+  ____                               _  _     _    _     _
+ / ___|_ __ ___   ___ ___ _ __ _   _| || |   / \  | |   | |
+| |  _| '__/ _ \ / __/ _ \ '__| | | | || |_ / _ \ | |   | |
+| |_| | | | (_) | (_|  __/ |  | |_| |__   _/ ___ \| |___| |___
+ \____|_|  \___/ \___\___|_|   \__, |  |_|/_/   \_\_____|_____|
+                               |___/
+Welcome to your new inventory booking system.
+  You may use the `help` command to get a list of available commands.
