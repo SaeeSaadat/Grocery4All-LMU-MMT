@@ -20,10 +20,8 @@ create table if not exists inventory_products (
     primary key (inventory_id, product_id)
 );
 
--- Type of transactions: Add, Sell, Restock
-create type transaction_type as enum ('Add', 'Sell', 'Restock');
 
-create table transactions (
+create table if not exists transactions (
     id serial primary key,
     type transaction_type not null,
     inventory_id int not null,
@@ -32,7 +30,8 @@ create table transactions (
     total_price decimal(10, 2) not null,
     transaction_date timestamp not null default current_timestamp,
     foreign key (inventory_id) references inventory(id),
-    foreign key (product_id) references products(id)
+    foreign key (product_id) references products(id),
+    check ( type in ('Add', 'Sell', 'Restock') )
 );
 
 
@@ -40,4 +39,9 @@ create table if not exists command_history (
     command varchar(255) not null,
     command_date timestamp not null default current_timestamp
 );
-)
+
+-- View on inventory products that also shows product names
+create view inventory_products_view as
+select p.name, inventory_products.*
+from inventory_products
+inner join products p on inventory_products.product_id = p.id
