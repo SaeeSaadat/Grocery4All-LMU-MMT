@@ -56,7 +56,8 @@ def start_instruction_loop():
                 graceful_exit()
                 break
             elif instruction.lower() == "help":
-                print("Help instructions")  # TODO: Add help instructions
+                print_message('resources/help_message.txt')
+                # TODO: Add help instructions
             elif instruction.lower() == "clear":
                 clear_terminal()
             elif instruction.lower() == "mock data":
