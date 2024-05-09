@@ -2,6 +2,7 @@ import os
 import logging
 from inventory import Inventory
 import database_manager
+from Exceptions import *
 
 
 def clear_terminal():
@@ -14,14 +15,14 @@ def clear_terminal():
     os.system(command)
 
 
-def print_welcome_message():
-    with open('welcome_message.txt', 'r') as f:
-        welcome_message = f.read()
+def print_message(text_file: str):
+    with open(text_file, 'r') as f:
+        message = f.read()
     try:
-        print(welcome_message.center(os.get_terminal_size().columns))
+        print(message.center(os.get_terminal_size().columns))
     except OSError:
         # In some terminal windows (like in the IDE) might happen, because of the .get_terminal_size() function
-        print(welcome_message)
+        print(message)
 
 
 def configure_logging():
@@ -35,36 +36,37 @@ def configure_logging():
 def setup():
     clear_terminal()
     configure_logging()
-    database_manager.initialize_database()
-    print_welcome_message()
-
+    print_message('resources/welcome_message.txt')
+    try:
+        database_manager.initialize_database()
+    except DatabaseAlreadyExistsException:
+        print("\nWelcome back!\n\n")
 
 
 def graceful_exit():
-    print("I hope you come back soon :)\nGoodbye!")
-    print("... Developed by: Saee Saadat ...")
-    print("... Project GitHub Repository: \t https://github.com/SaeeSaadat/Grocery4All-LMU-MMT ...")
-    print("... LinkedIn: \t\t\t https://www.linkedin.com/in/saeesaadat/ ...")
+    print_message('resources/exit_message.txt')
 
 
 def start_instruction_loop():
     inventory_object = Inventory.get_inventory()
-    while True:
-        instruction = input("Command> \t")
-        if instruction.lower() == "exit":
-            graceful_exit()
-            break
-        elif instruction.lower() == "help":
-            print("Help instructions")  # TODO: Add help instructions
-        elif instruction.lower() == "clear":
-            clear_terminal()
-        elif instruction.lower() == "mock data":
-            database_manager.insert_mock_data()
-        elif instruction.lower() == "TODO":
-            print("Starting the program...")
-        else:
-            print("Instruction not recognized.")
-
+    try:
+        while True:
+            instruction = input("\nCommand> \t")
+            if instruction.lower() == "exit":
+                graceful_exit()
+                break
+            elif instruction.lower() == "help":
+                print("Help instructions")  # TODO: Add help instructions
+            elif instruction.lower() == "clear":
+                clear_terminal()
+            elif instruction.lower() == "mock data":
+                database_manager.insert_mock_data()
+            elif instruction.lower() == "TODO":
+                print("Starting the program...")
+            else:
+                print("Instruction not recognized.")
+    except KeyboardInterrupt:
+        graceful_exit()
 
 if __name__ == '__main__':
     setup()

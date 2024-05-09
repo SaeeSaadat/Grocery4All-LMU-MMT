@@ -29,5 +29,6 @@ class Inventory:
         It then registers the inventory object in the database.
         :return: Inventory object
         """
+        # TODO: Manual Inventory Setup Procedure
         pass
 

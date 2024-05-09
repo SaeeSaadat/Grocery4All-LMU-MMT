@@ -2,4 +2,5 @@ __pycache__
 .DS_Store
 *.log
 database_manager/*.sqlite
+database_manager/*.db
 .idea
