@@ -30,8 +30,8 @@ class CommandMenu:
     def show_help(self):
         utilities.print_message(self.__class__.help_menu_file)
 
-    def handle_custom_commands(self, command: str):
-        pass
+    def handle_custom_commands(self, command: str) -> 'CommandMenu':
+        raise Exception("handle_custom_commands method is not implemented!")
 
     def handle_command(self, command: str) -> 'CommandMenu':
         """
@@ -51,13 +51,12 @@ class CommandMenu:
                 return self.prv_menu
         elif command == 'clear':
             utilities.clear_terminal()
-            return self
         elif command == 'help':
             self.show_help()
-            return self
         elif command not in self.commands:
             print("Command not recognized.")
             logging.warning("Command %s not recognized", command)
-            return self
         else:
-            self.handle_custom_commands(self, command)
+            return self.handle_custom_commands(command)
+
+        return self
