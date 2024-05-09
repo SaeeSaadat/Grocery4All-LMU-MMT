@@ -20,23 +20,24 @@ def print_welcome_message():
     try:
         print(welcome_message.center(os.get_terminal_size().columns))
     except OSError:
+        # In some terminal windows (like in the IDE) might happen, because of the .get_terminal_size() function
         print(welcome_message)
-
-
-def initiate_inventory() -> Inventory:
-    """
-    This function is used to initiate the inventory object.
-    :return: Inventory object
-    """
-    return Inventory.get_inventory()
 
 
 def configure_logging():
     logging.basicConfig(
-        filename='grocery4all.log',
+        filename='logs/grocery4all.log',
         level=logging.INFO,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
+
+
+def setup():
+    clear_terminal()
+    configure_logging()
+    database_manager.initialize_database()
+    print_welcome_message()
+
 
 
 def graceful_exit():
@@ -46,7 +47,8 @@ def graceful_exit():
     print("... LinkedIn: \t\t\t https://www.linkedin.com/in/saeesaadat/ ...")
 
 
-def start_instruction_loop(inventory_object: Inventory):
+def start_instruction_loop():
+    inventory_object = Inventory.get_inventory()
     while True:
         instruction = input("Command> \t")
         if instruction.lower() == "exit":
@@ -65,8 +67,5 @@ def start_instruction_loop(inventory_object: Inventory):
 
 
 if __name__ == '__main__':
-    clear_terminal()
-    configure_logging()
-    print_welcome_message()
-    inventory = initiate_inventory()
-    start_instruction_loop(inventory)
+    setup()
+    start_instruction_loop()

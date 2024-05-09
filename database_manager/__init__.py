@@ -6,20 +6,27 @@ This way, we can easily change the database implementation without affecting the
 import os
 import sqlite3
 import logging
+from contextlib import contextmanager
 
 
-def _get_connection_and_cursor():
+@contextmanager
+def _get_connection_and_cursor(commit: bool = False):
     """
     This function is used to get the connection and cursor objects.
     This method is private and must not be accessed by outside modules.
     :return: connection and cursor objects
     """
     conn = sqlite3.connect('database_manager/database.db')
-    cursor = conn.cursor()
-    return conn, cursor
+    try:
+        cursor = conn.cursor()
+        yield conn, cursor
+    finally:
+        if commit:
+            conn.commit()
+        conn.close()
 
 
-def initialize_database(fill_with_mock_data: bool = False):
+def initialize_database():
     """
     This function is used to initialize the database, if and only if the database file doesn't already exist.
     """
@@ -31,21 +38,14 @@ def initialize_database(fill_with_mock_data: bool = False):
     # Create the database file
     open('database_manager/database.db', 'w').close()
 
-    # run the initialize_database.sql script
-    with open('database_manager/initialize_database.sql', 'r') as sql_script:
-        # Connect to the database
-        conn, cursor = _get_connection_and_cursor()
-        cursor.executescript(sql_script.read())
-        logging.info("Database initialized.")
-
-    if fill_with_mock_data:
-        with open('database_manager/mock_data.sql', 'r') as sql_script:
+    with _get_connection_and_cursor(True) as (conn, cursor):
+        # run the initialize_database.sql script
+        with open('database_manager/initialize_database.sql', 'r') as sql_script:
+            # Connect to the database
             cursor.executescript(sql_script.read())
-            logging.info("Mock data inserted.")
+            logging.info("Database initialized.")
 
-    # Commit the changes and close the connection
-    conn.commit()
-    conn.close()
+        # Commit the changes and close the connection
     logging.info("Database initialization completed.")
 
 
@@ -53,9 +53,7 @@ def insert_mock_data():
     """
     This function is used to insert mock data into the database.
     """
-    with open('database_manager/mock_data.sql', 'r') as sql_script:
-        conn, cursor = _get_connection_and_cursor()
-        cursor.executescript(sql_script.read())
-        conn.commit()
-        conn.close()
-        logging.info("Mock data inserted.")
+    with _get_connection_and_cursor(True) as (conn, cursor):
+        with open('database_manager/mock_data.sql', 'r') as sql_script:
+            cursor.executescript(sql_script.read())
+    logging.info("Mock data inserted.")
