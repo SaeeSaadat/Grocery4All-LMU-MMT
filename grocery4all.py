@@ -1,39 +1,26 @@
-import os
 import logging
 from inventory import Inventory
+from utilities import print_message, clear_terminal
 import database_manager
 from Exceptions import *
-
-
-def clear_terminal():
-    """
-    Clear terminal command for different platforms
-    """
-    command = "clear"  # Linux and macOS
-    if os.name == "nt":  # Windows
-        command = "cls"
-    os.system(command)
-
-
-def print_message(text_file: str):
-    with open(text_file, 'r') as f:
-        message = f.read()
-    try:
-        print(message.center(os.get_terminal_size().columns))
-    except OSError:
-        # In some terminal windows (like in the IDE) might happen, because of the .get_terminal_size() function
-        print(message)
+from menu.main_command_menu import MainCommandMenu
 
 
 def configure_logging():
     logging.basicConfig(
         filename='logs/grocery4all.log',
-        level=logging.INFO,
+        # level=logging.INFO,
+        level=logging.DEBUG,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
 
 
 def setup():
+    """
+    This function is responsible for setting up the program.
+    It will do the configurations of the software, as well as setting up the database.
+    :return: The inventory object, which is used to access the data of the inventory.
+    """
     clear_terminal()
     configure_logging()
     print_message('resources/welcome_message.txt')
@@ -41,34 +28,30 @@ def setup():
         database_manager.initialize_database()
     except DatabaseAlreadyExistsException:
         print("\nWelcome back!\n\n")
+    _ = Inventory.get_inventory()
+    # This will setup the inventory singleton object.
+    # Every data in the database will be reachable through this object.
 
 
 def graceful_exit():
     print_message('resources/exit_message.txt')
 
 
-def start_instruction_loop():
-    inventory_object = Inventory.get_inventory()
+def start():
+    menu = MainCommandMenu()
     try:
         while True:
-            instruction = input("\nCommand> \t")
-            if instruction.lower() == "exit":
+            command = input("\nCommand> \t").lower()
+            if command == "exit":
+                logging.warning("Exiting the program by user's request!")
                 graceful_exit()
-                break
-            elif instruction.lower() == "help":
-                print_message('resources/help_message.txt')
-                # TODO: Add help instructions
-            elif instruction.lower() == "clear":
-                clear_terminal()
-            elif instruction.lower() == "mock data":
-                database_manager.insert_mock_data()
-            elif instruction.lower() == "TODO":
-                print("Starting the program...")
             else:
-                print("Instruction not recognized.")
+                menu = menu.handle_command(command)
+
     except KeyboardInterrupt:
         graceful_exit()
 
+
 if __name__ == '__main__':
     setup()
-    start_instruction_loop()
+    start()
