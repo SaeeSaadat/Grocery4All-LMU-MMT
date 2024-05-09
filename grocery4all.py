@@ -45,6 +45,7 @@ def start():
             if command == "exit":
                 logging.warning("Exiting the program by user's request!")
                 graceful_exit()
+                break
             else:
                 menu = menu.handle_command(command)
 

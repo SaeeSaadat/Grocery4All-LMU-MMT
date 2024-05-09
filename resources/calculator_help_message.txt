@@ -1,0 +1,12 @@
+Calculator Mode Help Instructions
+You may interact with the software using the following commands
+
+1. help: Show help information
+2. exit: Exit the program
+3. clear: Clear the console
+4. back: Go back to the main menu
+
+5. revenue: Show the total revenue so far
+6. value: Show the total value of the inventory in its current state
+7. cost: Show the total cost of the business
+8. profit: Show the total profit of the business

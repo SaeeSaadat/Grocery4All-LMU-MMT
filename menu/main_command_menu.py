@@ -1,4 +1,5 @@
 from menu.command_menu import CommandMenu
+from menu.calculator_command_menu import CalculatorCommandMenu
 import database_manager
 
 
@@ -30,6 +31,7 @@ class MainCommandMenu(CommandMenu):
             print("History")
         elif command == "calculator":
             print("Entering Calculator mode")
+            return CalculatorCommandMenu(self)
         elif command == "mock data":
             # Fills the database with mock data, using the database_manager/mock_data.sql script.
             database_manager.insert_mock_data()

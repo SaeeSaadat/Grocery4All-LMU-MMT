@@ -48,6 +48,7 @@ class CommandMenu:
                 logging.warning("User tried to go back in menu %s but there was no prv menu!", self)
             else:
                 logging.debug("user returned to previous menu: %s", self.prv_menu)
+                print("Going back to", self.prv_menu)
                 return self.prv_menu
         elif command == 'clear':
             utilities.clear_terminal()
