@@ -5,6 +5,7 @@ class Inventory:
     @staticmethod
     def get_inventory() -> 'Inventory':
         """
+        SINGLETON!
         This method is used to get the inventory object.
         If the inventory object does not exist, it will create a new one.
         :return: Inventory object
