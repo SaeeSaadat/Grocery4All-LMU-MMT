@@ -66,7 +66,6 @@ def insert_mock_data():
     This function is used to insert mock data into the database.
     """
     with _get_connection_and_cursor(True) as (conn, cursor):
-        # TODO: Check if database is not empty!
         with open('database_manager/mock_data.sql', 'r') as sql_script:
             cursor.executescript(sql_script.read())
     logging.info("Mock data inserted.")

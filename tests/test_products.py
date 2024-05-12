@@ -38,6 +38,7 @@ class TestProducts(unittest.TestCase):
             quantity=20
         )
         new_product.add_to_database()
-        self.assertEqual(product_db.get_product_by_id(new_product.product_id).name, new_product.name)
-
-        self.assertRaises(ProductExistsInDatabase, new_product.add_to_database)  # detect duplicate name!
+        # Test Insertion
+        self.assertEqual(Product.get_product_from_database(new_product.product_id).name, new_product.name)
+        # detect duplicate name!
+        self.assertRaises(ProductExistsInDatabase, new_product.add_to_database)
