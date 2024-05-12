@@ -1,3 +1,6 @@
+"""
+This module contains utility functions that are used in the project.
+"""
 import os
 
 
