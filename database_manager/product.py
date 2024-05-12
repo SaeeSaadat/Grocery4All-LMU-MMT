@@ -15,13 +15,12 @@ def get_product_by_id(product_id: int) -> Optional[Product]:
         product_data = cursor.fetchone()
         if product_data is None:
             return None
-
         return Product(
             product_data['name'],
             product_data['purchase_price'],
             product_data['selling_price'],
             product_id=product_data['id'],
-            quantity=product_data.get('quantity', 0)
+            quantity=product_data['quantity']
         )
 
 
@@ -39,11 +38,18 @@ def update_product_quantity_in_inventory(product_id: int, quantity: int):
         logging.info("Updated the quantity of product #%d in the inventory to value %d", product_id, quantity)
 
 
-def get_all_products(only_available: bool = False) -> list:
+def get_all_products(only_available: bool = False) -> list[Product]:
     with _get_connection_and_cursor(return_dict=True) as (conn, cursor):
         if only_available:
             cursor.execute(
                 "SELECT * FROM products WHERE quantity > 0;")
         else:
             cursor.execute("SELECT * FROM products;")
-        return cursor.fetchall()
+        products = cursor.fetchall()
+        return [Product(
+            product['name'],
+            product['purchase_price'],
+            product['selling_price'],
+            product_id=product['id'],
+            quantity=product['quantity']
+        ) for product in products]
