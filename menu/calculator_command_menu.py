@@ -2,7 +2,7 @@ import logging
 
 from menu.command_menu import CommandMenu
 import database_manager
-import calculations
+from inventory import calculations
 
 
 class CalculatorCommandMenu(CommandMenu):

@@ -7,6 +7,8 @@ import os
 import sqlite3
 import logging
 from contextlib import contextmanager
+from typing import Optional
+
 from database_manager.Exceptions import DatabaseAlreadyExistsException
 
 DB_FILE_NAME = 'database_manager/database.sqlite'
@@ -41,11 +43,11 @@ def initialize_database(db_name: str = 'database.sqlite', delete_previous_db: bo
 
     DB_FILE_NAME = f'database_manager/{db_name}'
     # Check if database file exists
-    if os.path.exists(DB_FILE_NAME):
+    if os.path.exists(DB_FILE_NAME) and get_inventory_name() is not None:
         if delete_previous_db:
             os.remove(DB_FILE_NAME)
         else:
-            raise DatabaseAlreadyExistsException()
+            raise DatabaseAlreadyExistsException(get_inventory_name())
 
     # Create the database file
     open(DB_FILE_NAME, 'w').close()
@@ -69,3 +71,18 @@ def insert_mock_data():
         with open('database_manager/mock_data.sql', 'r') as sql_script:
             cursor.executescript(sql_script.read())
     logging.info("Mock data inserted.")
+
+
+def setup_inventory(inventory_name: str):
+    with _get_connection_and_cursor(commit=True) as (conn, cursor):
+        cursor.execute("INSERT INTO inventory (name) VALUES (?)", (inventory_name,))
+
+
+def get_inventory_name() -> Optional[str]:
+    with _get_connection_and_cursor(True) as (conn, cursor):
+        try:
+            cursor.execute('SELECT name FROM inventory')
+            result = cursor.fetchone()
+            return result[0] if result else None
+        except sqlite3.OperationalError:
+            return None

@@ -18,6 +18,7 @@ class TestProducts(unittest.TestCase):
 
     def test_mock_data(self):
         self.assertTrue(os.path.exists('database_manager/test_database.sqlite'))
+        self.assertEqual(database_manager.get_inventory_name(), 'Grocery 4 All')
         self.assertEqual(product_db.get_product_by_id(1).name, 'Milk')
         self.assertEqual(product_db.get_product_by_id(10).name, 'Coffee Beans')
         self.assertEqual(product_db.get_product_by_id(5).quantity, 480)
