@@ -31,20 +31,20 @@ def _get_connection_and_cursor(commit: bool = False, return_dict: bool = False):
         conn.close()
 
 
-def initialize_database(delete_previous_db: bool = False):
+def initialize_database(db_name: str = 'database.sqlite', delete_previous_db: bool = False):
     """
     This function is used to initialize the database, if and only if the database file doesn't already exist.
     """
-
+    db_file_name = f'database_manager/{db_name}'
     # Check if database file exists
-    if os.path.exists('database_manager/database.sqlite'):
+    if os.path.exists(db_file_name):
         if delete_previous_db:
-            os.remove('database_manager/database.sqlite')
+            os.remove(db_name)
         else:
             raise DatabaseAlreadyExistsException()
 
     # Create the database file
-    open('database_manager/database.sqlite', 'w').close()
+    open(db_file_name, 'w').close()
 
     with _get_connection_and_cursor(True) as (conn, cursor):
         # run the initialize_database.sql script
@@ -55,7 +55,6 @@ def initialize_database(delete_previous_db: bool = False):
 
         # Commit the changes and close the connection
     logging.info("Database initialization completed.")
-
 
 
 def insert_mock_data():

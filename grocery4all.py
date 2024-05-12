@@ -28,9 +28,6 @@ def setup():
         database_manager.initialize_database()
     except DatabaseAlreadyExistsException:
         print("\nWelcome back!\n\n")
-    _ = Inventory.get_inventory()
-    # This will setup the inventory singleton object.
-    # Every data in the database will be reachable through this object.
 
 
 def graceful_exit():
