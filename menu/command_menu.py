@@ -25,7 +25,7 @@ class CommandMenu:
         self.prv_menu = prv_menu
 
     def __str__(self):
-        return f'Menu {self.__class__}'
+        return f'{self.__class__.__name__}'
 
     def show_help(self):
         utilities.print_message(self.__class__.help_menu_file)
