@@ -9,6 +9,8 @@ import logging
 from contextlib import contextmanager
 from database_manager.Exceptions import DatabaseAlreadyExistsException
 
+DB_FILE_NAME = 'database_manager/database.sqlite'
+
 
 @contextmanager
 def _get_connection_and_cursor(commit: bool = False, return_dict: bool = False):
@@ -19,7 +21,7 @@ def _get_connection_and_cursor(commit: bool = False, return_dict: bool = False):
     :param return_dict: If true, the results will be in the format of a dictionary instead of tuple
     :return: connection and cursor objects
     """
-    conn = sqlite3.connect('database_manager/database.sqlite')
+    conn = sqlite3.connect(DB_FILE_NAME)
     if return_dict:
         conn.row_factory = sqlite3.Row
     try:
@@ -35,16 +37,18 @@ def initialize_database(db_name: str = 'database.sqlite', delete_previous_db: bo
     """
     This function is used to initialize the database, if and only if the database file doesn't already exist.
     """
-    db_file_name = f'database_manager/{db_name}'
+    global DB_FILE_NAME
+
+    DB_FILE_NAME = f'database_manager/{db_name}'
     # Check if database file exists
-    if os.path.exists(db_file_name):
+    if os.path.exists(DB_FILE_NAME):
         if delete_previous_db:
-            os.remove(db_name)
+            os.remove(DB_FILE_NAME)
         else:
             raise DatabaseAlreadyExistsException()
 
     # Create the database file
-    open(db_file_name, 'w').close()
+    open(DB_FILE_NAME, 'w').close()
 
     with _get_connection_and_cursor(True) as (conn, cursor):
         # run the initialize_database.sql script
