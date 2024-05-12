@@ -7,17 +7,21 @@ import os
 import sqlite3
 import logging
 from contextlib import contextmanager
-from Exceptions import DatabaseAlreadyExistsException
+from database_manager.Exceptions import DatabaseAlreadyExistsException
 
 
 @contextmanager
-def _get_connection_and_cursor(commit: bool = False):
+def _get_connection_and_cursor(commit: bool = False, return_dict: bool = False):
     """
     This function is used to get the connection and cursor objects.
     This method is private and must not be accessed by outside modules.
+    :param commit: If true, the connection will automatically commit the changes before closing
+    :param return_dict: If true, the results will be in the format of a dictionary instead of tuple
     :return: connection and cursor objects
     """
     conn = sqlite3.connect('database_manager/database.sqlite')
+    if return_dict:
+        conn.row_factory = sqlite3.Row
     try:
         cursor = conn.cursor()
         yield conn, cursor
@@ -59,6 +63,7 @@ def insert_mock_data():
     This function is used to insert mock data into the database.
     """
     with _get_connection_and_cursor(True) as (conn, cursor):
+        # TODO: Check if database is not empty!
         with open('database_manager/mock_data.sql', 'r') as sql_script:
             cursor.executescript(sql_script.read())
     logging.info("Mock data inserted.")

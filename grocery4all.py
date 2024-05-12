@@ -2,7 +2,7 @@ import logging
 from inventory import Inventory
 from utilities import print_message, clear_terminal
 import database_manager
-from Exceptions import *
+from database_manager.Exceptions import DatabaseAlreadyExistsException
 from menu.main_command_menu import MainCommandMenu
 
 

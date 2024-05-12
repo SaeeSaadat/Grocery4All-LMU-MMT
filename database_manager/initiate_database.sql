@@ -1,12 +1,12 @@
 create table if not exists products (
-    id serial primary key,
+    id INTEGER primary key,
     name varchar(255) not null,
     purchase_price decimal(10, 2) not null,
     selling_price decimal(10, 2) not null
 );
 
 create table if not exists inventory (
-    id serial primary key,
+    id INTEGER primary key,
     name varchar(255),
     creation_date timestamp not null default current_timestamp
 );
@@ -22,7 +22,7 @@ create table if not exists inventory_products (
 
 
 create table if not exists transactions (
-    id serial primary key,
+    id INTEGER primary key,
     type transaction_type not null,
     inventory_id int not null,
     product_id int not null,
