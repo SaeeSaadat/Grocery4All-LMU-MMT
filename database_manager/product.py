@@ -1,6 +1,9 @@
+import sqlite3
+
 from database_manager import _get_connection_and_cursor
 from typing import Optional
 from inventory.product import Product
+from inventory.Exceptions import ProductExistsInDatabase
 import logging
 
 
@@ -24,11 +27,21 @@ def get_product_by_id(product_id: int) -> Optional[Product]:
         )
 
 
-def save_product_to_database(product: Product):
+def add_product_to_database(product: Product) -> Optional[int]:
+    """
+    This function will insert the given product into the database.
+    If the product already exists, it will throw an Exception!
+    :param product: the product you want to insert into the database!
+    :return: ID of the new product.
+    """
     with _get_connection_and_cursor(commit=True) as (conn, cursor):
-        cursor.execute("INSERT INTO products (name, purchase_price, selling_price) VALUES (?, ?, ?)",
-                       (product.name, product.purchase_price, product.selling_price))
+        try:
+            cursor.execute("INSERT INTO products (name, purchase_price, selling_price) VALUES (?, ?, ?)",
+                           (product.name, product.purchase_price, product.selling_price))
+        except sqlite3.IntegrityError as e:
+            raise ProductExistsInDatabase from e
         logging.info("Saved new product object %s to the database", product.name)
+        return cursor.lastrowid
 
 
 def update_product_quantity_in_inventory(product_id: int, quantity: int):

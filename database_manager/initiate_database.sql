@@ -6,7 +6,7 @@ create table if not exists inventory (
 
 create table if not exists products (
     id INTEGER primary key,
-    name varchar(255) not null,
+    name varchar(255) not null unique,
     purchase_price decimal(10, 2) not null,
     selling_price decimal(10, 2) not null,
     quantity int not null default 0

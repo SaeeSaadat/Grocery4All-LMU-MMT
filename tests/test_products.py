@@ -3,6 +3,8 @@ import os
 
 import database_manager
 from database_manager import product as product_db
+from inventory.product import Product
+from inventory.Exceptions import ProductExistsInDatabase
 
 
 class TestProducts(unittest.TestCase):
@@ -27,3 +29,15 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(products[9].name, 'Coffee Beans')
         products = product_db.get_all_products(only_available=True)
         self.assertEqual(len(products), 10)
+
+    def test_add_product(self):
+        new_product = Product(
+            'ketchup',
+            1.0,
+            2.0,
+            quantity=20
+        )
+        new_product.add_to_database()
+        self.assertEqual(product_db.get_product_by_id(new_product.product_id).name, new_product.name)
+
+        self.assertRaises(ProductExistsInDatabase, new_product.add_to_database)  # detect duplicate name!

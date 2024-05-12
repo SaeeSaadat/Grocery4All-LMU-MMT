@@ -21,12 +21,8 @@ class Product:
 
     @staticmethod
     def get_product_from_database(product_id: int) -> Optional['Product']:
-        product_dict = product_db.get_product_by_id(product_id)
-        if product_dict is None:
-            return None
-        return Product(
-            product_dict['name'],
-            product_dict['purchase_price'],
-            product_dict['selling_price'],
-            product_id=product_dict['product_id']
-        )
+        return product_db.get_product_by_id(product_id)
+
+    def add_to_database(self):
+        self.product_id = product_db.add_product_to_database(self)
+
