@@ -21,7 +21,7 @@ class Product:
 
     @staticmethod
     def get_product_from_database(product_id: int) -> Optional['Product']:
-        product_dict = product_db.get_product_with_id(product_id)
+        product_dict = product_db.get_product_by_id(product_id)
         if product_dict is None:
             return None
         return Product(
