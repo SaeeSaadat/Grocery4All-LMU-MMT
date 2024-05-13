@@ -32,6 +32,15 @@ class Product:
         """
         return product_db.get_product_by_id(product_id)
 
+    @staticmethod
+    def get_all_products(only_available: bool = False) -> List['Product']:
+        """
+        This static method is used to retrieve all the products from the database.
+        :param only_available: if True, only available products will be returned
+        :return: list of products
+        """
+        return product_db.get_all_products(only_available)
+
     def add_to_database(self):
         self.product_id = product_db.add_product_to_database(self)  # Register the product in the database
         AddTransaction(self).save_to_database()  # Register the transaction in the database
@@ -83,3 +92,16 @@ class Product:
         :return: total money spent - total money gained by selling the product
         """
         return self.get_sold_value() - self.get_purchased_value()
+
+    def get_full_description(self, show_zero_quantity: bool = True) -> str:
+        description = f"#{self.product_id}: {self.name}\n"
+        if self.quantity > 0 or show_zero_quantity:
+            description += f"\tQuantity: {self.quantity}\n"
+        description += f"\tPurchase Price: {self.purchase_price}\n"
+        description += f"\tSelling Price: {self.selling_price}\n"
+        description += f"\tTotal Number Of Units Sold: {self.get_how_many_sold()}\n"
+        description += f"\tTotal Number Of Units Purchased: {self.get_how_many_purchased()}\n"
+        description += f"\tTotal Profit: {self.get_sold_value()}\n"
+        description += f"\tTotal Purchase Cost: {self.get_purchased_value()}\n"
+        description += f"\tTotal Balance: {self.get_purchased_value()}"
+        return description

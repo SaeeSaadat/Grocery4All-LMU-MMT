@@ -55,9 +55,9 @@ def get_all_products(only_available: bool = False) -> list[Product]:
     with _get_connection_and_cursor(return_dict=True) as (conn, cursor):
         if only_available:
             cursor.execute(
-                "SELECT * FROM products WHERE quantity > 0;")
+                "SELECT * FROM products WHERE quantity > 0 ORDER BY id;")
         else:
-            cursor.execute("SELECT * FROM products;")
+            cursor.execute("SELECT * FROM products ORDER BY id;")
         products = cursor.fetchall()
         return [Product(
             product['name'],

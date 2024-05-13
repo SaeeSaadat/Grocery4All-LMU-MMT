@@ -87,7 +87,7 @@ the `database_manager` directory.
 - **calculator**: Go to the calculation mode
 
 - **reset**: Reset to factory settings
-- **mock** data: Fill the database with mock data
+- **mock**: Fill the database with mock data
 - **manual** initiation: Manually initiate a new database
 
 
