@@ -80,7 +80,7 @@ the `database_manager` directory.
 ### Commands in the main menu
 - **inventory**: Display inventory information, and the products available in the inventory
 - **products**: Display all products
-- **new** product: Add a new type of product
+- **add**: Add a new type of product
 - **sell**: record a sell transaction
 - **restock**: record a restock transaction
 - **history**: Display the transaction history

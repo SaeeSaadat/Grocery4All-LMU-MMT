@@ -21,8 +21,8 @@ class MainCommandMenu(CommandMenu):
             print("TODO: Inventory")
         elif command == "products":
             print("Show products")
-        elif command == "new product":
-            print("add prd")
+        elif command == "add":
+            print("add product")
         elif command == "sell":
             pass
         elif command == "restock":

@@ -1,20 +1,20 @@
 Help Instructions
 You may interact with the software using the following commands
 
-1. help: Show help information
-2. exit: Exit the program
-3. clear: Clear the console
+- help: Show help information
+- exit: Exit the program
+- clear: Clear the console
 
-4. inventory: Display inventory information, and the products available in the inventory
-5. products: Display all products
-6. new product: Add a new type of product
-7. sell: record a sell transaction
-8. restock: record a restock transaction
-9. history: Display the transaction history
-10. calculator: Go to the calculation mode
+- inventory: Display inventory information, and the products available in the inventory
+- products: Display all products
+- add: Add a new type of product
+- sell: record a sell transaction
+- restock: record a restock transaction
+- history: Display the transaction history
+- calculator: Go to the calculation mode
 
 --- Danger Zone ---
-11. reset: Reset to factory settings
-12. mock data: Fill the database with mock data
-13. manual initiation: Manually initiate a new database
+- reset: Reset to factory settings
+- mock data: Fill the database with mock data
+- manual initiation: Manually initiate a new database
 
