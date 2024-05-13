@@ -12,13 +12,13 @@ class Transaction:
     def __init__(self, product: Product):
         self.product = product
 
-    def add_to_database(self):
+    def save_to_database(self):
         raise Exception("Not Implemented in the subclass!")
 
 
-class SaleTransaction(Transaction):
+class SellTransaction(Transaction):
     """
-    This class represents a sale transaction.
+    This class represents a sell transaction.
     """
 
     def __init__(self, product: Product, quantity: int):
@@ -26,10 +26,10 @@ class SaleTransaction(Transaction):
         self.quantity = quantity
 
     def __str__(self):
-        return f"Sale Transaction: {self.quantity} units of product #{self.product.product_id}"
+        return f"Sell Transaction: {self.quantity} units of product #{self.product.product_id}"
 
-    def add_to_database(self):
-        transaction_db.save_transaction_to_database('Sale', self.product.product_id, self.quantity)
+    def save_to_database(self):
+        transaction_db.save_transaction_to_database('Sell', self.product.product_id, self.quantity)
 
 
 class RestockTransaction(Transaction):
@@ -44,7 +44,7 @@ class RestockTransaction(Transaction):
     def __str__(self):
         return f"Restock Transaction: {self.quantity} units of product #{self.product.product_id}"
 
-    def add_to_database(self):
+    def save_to_database(self):
         transaction_db.save_transaction_to_database('Restock', self.product.product_id, self.quantity)
 
 
@@ -59,5 +59,5 @@ class AddTransaction(Transaction):
     def __str__(self):
         return f"Add Transaction: Product {self.product.name} -> #{self.product.product_id}"
 
-    def add_to_database(self):
+    def save_to_database(self):
         transaction_db.save_transaction_to_database('Add', self.product.product_id)
