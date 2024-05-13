@@ -1,8 +1,8 @@
 import logging
-from typing import Optional
-from database_manager import product as product_db
+from typing import Optional, List
+from database_manager import product as product_db, transactions as transaction_db
 from inventory.Exceptions import NotEnoughProductInStock
-from inventory.transactions import SellTransaction, RestockTransaction, AddTransaction
+from inventory.transactions import Transaction, SellTransaction, RestockTransaction, AddTransaction
 
 
 class Product:
@@ -51,3 +51,5 @@ class Product:
         product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
         SellTransaction(self, quantity).save_to_database()  # Register the transaction in the database
 
+    def get_transactions(self) -> List[Transaction]:
+        return transaction_db.get_all_product_transactions(self)
