@@ -1,5 +1,7 @@
+import logging
 from typing import Optional
 from database_manager import product as product_db
+from inventory.Exceptions import NotEnoughProductInStock
 
 
 class Product:
@@ -29,3 +31,12 @@ class Product:
     def restock(self, quantity: int):
         self.quantity += quantity
         product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
+        # TODO: Transaction
+
+    def sell(self, quantity: int):
+        if quantity > self.quantity:
+            logging.warning("Not enough product in stock to sell %d units of %s", quantity, self.name)
+            raise NotEnoughProductInStock
+        self.quantity -= quantity
+        product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
+        # TODO: Transaction

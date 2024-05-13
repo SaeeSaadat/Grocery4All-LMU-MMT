@@ -4,7 +4,7 @@ import os
 import database_manager
 from database_manager import product as product_db
 from inventory.product import Product
-from inventory.Exceptions import ProductExistsInDatabase
+from inventory.Exceptions import ProductExistsInDatabase, NotEnoughProductInStock
 
 
 class TestProducts(unittest.TestCase):
@@ -51,3 +51,13 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 10)
         product.restock(100)
         self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 110)
+
+    def test_sell_product(self):
+        product = Product.get_product_from_database(1)
+        prv_quantity = product.quantity
+        product.sell(10)
+        self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity - 10)
+        product.sell(100)
+        self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity - 110)
+        product.sell(product.quantity)
+        self.assertRaises(NotEnoughProductInStock, product.sell, 1)
