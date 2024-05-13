@@ -43,3 +43,11 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(Product.get_product_from_database(new_product.product_id).name, new_product.name)
         # detect duplicate name!
         self.assertRaises(ProductExistsInDatabase, new_product.add_to_database)
+
+    def test_restock_product(self):
+        product = Product.get_product_from_database(1)
+        prv_quantity = product.quantity
+        product.restock(10)
+        self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 10)
+        product.restock(100)
+        self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 110)

@@ -26,3 +26,6 @@ class Product:
     def add_to_database(self):
         self.product_id = product_db.add_product_to_database(self)
 
+    def restock(self, quantity: int):
+        self.quantity += quantity
+        product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
