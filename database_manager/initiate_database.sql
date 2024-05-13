@@ -16,8 +16,8 @@ create table if not exists transactions (
     id INTEGER primary key,
     type transaction_type not null,
     product_id int not null,
-    quantity int not null,
-    total_price decimal(10, 2) not null,
+    quantity int not null default 0,
+    total_value decimal(10, 2) not null default 0,
     transaction_time timestamp not null default current_timestamp,
     foreign key (product_id) references products(id),
     check ( type in ('Add', 'Sell', 'Restock') )

@@ -18,3 +18,30 @@ insert into products (id, name, purchase_price, selling_price) values (12, 'Cook
 insert into products (id, name, purchase_price, selling_price) values (13, 'Cooking Oil', 2.0, 2.75);
 -- No Tea, Cookies and Oil in stock :(
 
+-- Each product must have been added via an `Add` Transaction
+insert into transactions (type, product_id) values ('Add', 1);
+insert into transactions (type, product_id) values ('Add', 2);
+insert into transactions (type, product_id) values ('Add', 3);
+insert into transactions (type, product_id) values ('Add', 4);
+insert into transactions (type, product_id) values ('Add', 5);
+insert into transactions (type, product_id) values ('Add', 6);
+insert into transactions (type, product_id) values ('Add', 7);
+insert into transactions (type, product_id) values ('Add', 8);
+insert into transactions (type, product_id) values ('Add', 9);
+insert into transactions (type, product_id) values ('Add', 10);
+insert into transactions (type, product_id) values ('Add', 11);
+insert into transactions (type, product_id) values ('Add', 12);
+insert into transactions (type, product_id) values ('Add', 13);
+
+-- The quantity of the products must have been set using `Restock` Transactions!
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 1, 400, 400 * 1.5);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 2, 500, 500 * 1.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 3, 500, 500 * 2.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 4, 250, 250 * 3.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 5, 480, 480 * 1.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 6, 1500, 1500 * 5.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 7, 1250, 1250 * 5.5);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 8, 1000, 1000 * 3.0);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 9, 750, 750 * 0.5);
+insert into transactions (type, product_id, quantity, total_value) values ('Restock', 10, 600, 600 * 7.0);
+
