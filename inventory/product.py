@@ -1,5 +1,5 @@
 import logging
-from typing import Optional, List
+from typing import Optional, List, Tuple
 from database_manager import product as product_db
 from database_manager import transactions as transaction_db
 from inventory.Exceptions import NotEnoughProductInStock
@@ -52,7 +52,34 @@ class Product:
         # Register the quantity change in the database
         product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
         # Register the transaction in the database
-        SellTransaction(self, quantity, value=quantity*self.selling_price).save_to_database()
+        SellTransaction(self, quantity, value=quantity * self.selling_price).save_to_database()
 
     def get_transactions(self) -> List[Transaction]:
         return transaction_db.get_all_product_transactions(self)
+
+    def get_inventory_value(self) -> float:
+        """
+        This method will return how much the available product in the inventory is worth.
+        :return: quantity * selling_price
+        """
+        return self.quantity * self.selling_price
+
+    def get_how_many_sold(self) -> int:
+        return transaction_db.get_product_sold_count(self.product_id)
+
+    def get_sold_value(self) -> float:
+        return transaction_db.get_product_sold_value(self.product_id)
+
+    def get_how_many_purchased(self) -> int:
+        return transaction_db.get_product_purchased_count(self.product_id)
+
+    def get_purchased_value(self) -> float:
+        return transaction_db.get_product_purchased_value(self.product_id)
+
+    def get_total_balance(self) -> float:
+        """
+        This will calculate how much money has been spent buying (restocking) the product
+        vs how much profit has been made by selling the product.
+        :return: total money spent - total money gained by selling the product
+        """
+        return self.get_sold_value() - self.get_purchased_value()

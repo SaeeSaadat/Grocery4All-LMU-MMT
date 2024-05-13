@@ -37,8 +37,38 @@ class TestProducts(unittest.TestCase):
 
     def test_restock_product(self):
         product = Product.get_product_from_database(1)
+        initial_quantity = product.quantity
         product.restock(100)
+        product.restock(10)
+        self.assertEqual(3,
+                         len(
+                             list(
+                                 filter(
+                                     lambda x: x.__class__.__name__ == 'RestockTransaction', product.get_transactions()
+                                 )
+                             )
+                         )
+                         )
+        self.assertEqual(product.get_purchased_value(), (initial_quantity + 110) * product.purchase_price)
 
     def test_sell_product(self):
         product = Product.get_product_from_database(1)
         product.sell(100)
+        self.assertEqual(1,
+                         len(
+                             list(
+                                 filter(
+                                     lambda x: x.__class__.__name__ == 'SellTransaction', product.get_transactions()
+                                 )
+                             )
+                         )
+                         )
+        self.assertEqual(product.get_sold_value(), 100 * product.selling_price)
+
+    def test_balance(self):
+        product = Product.get_product_from_database(1)
+        stock_value = product.get_purchased_value()
+        product.restock(10)
+        product.sell(5)
+        expected_balance = 5 * product.selling_price - (stock_value + 10 * product.purchase_price)
+        self.assertEqual(product.get_total_balance(), expected_balance)

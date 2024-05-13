@@ -8,7 +8,7 @@ from inventory.transactions import Transaction, SellTransaction, RestockTransact
 def save_transaction_to_database(transaction_type: str, product_id: int, quantity: int = 0, value: float = 0.0):
     """
     This function will save the transaction to the database.
-    :param transaction_type: Either `Add`, 'Sale' or 'Restock'
+    :param transaction_type: Either `Add`, 'Sell' or 'Restock'
     :param product_id: the product that the transaction is about
     :param quantity: How many units of the product are involved in the transaction (0 for `Add`)
     :param value: How much money is involved in the transaction (0.0 for `Add`)
@@ -34,10 +34,37 @@ def get_all_product_transactions(product) -> List[Transaction]:
             if transaction_type == 'Add':
                 result.append(AddTransaction(product))
             elif transaction_type == 'Sell':
-                result.append(SellTransaction(product, transaction_dict['quantity'], transaction_dict['value']))
+                result.append(SellTransaction(product, transaction_dict['quantity'], transaction_dict['total_value']))
             elif transaction_type == 'Restock':
-                result.append(RestockTransaction(product, transaction_dict['quantity'], transaction_dict['value']))
+                result.append(RestockTransaction(product, transaction_dict['quantity'], transaction_dict['total_value']))
             else:
                 raise Exception('Invalid transaction type found in database!')
 
     return result
+
+
+def get_product_sold_count(product_id: int) -> int:
+    with _get_connection_and_cursor() as (_, cursor):
+        cursor.execute('SELECT COUNT(*) FROM transactions WHERE product_id = ? AND type = ?', (product_id, 'Sell'))
+        return cursor.fetchone()[0]
+
+
+def get_product_sold_value(product_id: int) -> float:
+    with _get_connection_and_cursor() as (_, cursor):
+        cursor.execute('SELECT SUM(total_value) FROM transactions WHERE product_id = ? AND type = ?',
+                       (product_id, 'Sell'))
+        result = cursor.fetchone()
+        return result[0]
+
+
+def get_product_purchased_count(product_id: int) -> int:
+    with _get_connection_and_cursor() as (_, cursor):
+        cursor.execute('SELECT COUNT(*) FROM transactions WHERE product_id = ? AND type = ?', (product_id, 'Restock'))
+        return cursor.fetchone()[0]
+
+
+def get_product_purchased_value(product_id: int) -> float:
+    with _get_connection_and_cursor() as (_, cursor):
+        cursor.execute('SELECT SUM(total_value) FROM transactions WHERE product_id = ? AND type = ?',
+                       (product_id, 'Restock'))
+        return cursor.fetchone()[0]

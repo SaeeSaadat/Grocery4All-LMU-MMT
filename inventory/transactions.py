@@ -29,7 +29,8 @@ class SellTransaction(Transaction):
         return f"Sell Transaction: {self.quantity} units of product #{self.product.product_id}"
 
     def save_to_database(self):
-        transaction_db.save_transaction_to_database('Sell', self.product.product_id, self.quantity)
+        transaction_db.save_transaction_to_database('Sell', self.product.product_id, self.quantity,
+                                                    self.quantity * self.product.selling_price)
 
 
 class RestockTransaction(Transaction):
@@ -46,7 +47,8 @@ class RestockTransaction(Transaction):
         return f"Restock Transaction: {self.quantity} units of product #{self.product.product_id}"
 
     def save_to_database(self):
-        transaction_db.save_transaction_to_database('Restock', self.product.product_id, self.quantity)
+        transaction_db.save_transaction_to_database('Restock', self.product.product_id, self.quantity,
+                                                    self.quantity * self.product.purchase_price)
 
 
 class AddTransaction(Transaction):
