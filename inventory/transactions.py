@@ -1,6 +1,3 @@
-from typing import List
-
-from inventory.product import Product
 from database_manager import transactions as transaction_db
 
 
@@ -9,7 +6,7 @@ class Transaction:
     This class represents a transaction. It is an abstract class.
     """
 
-    def __init__(self, product: Product):
+    def __init__(self, product):
         self.product = product
 
     def save_to_database(self):
@@ -21,7 +18,7 @@ class SellTransaction(Transaction):
     This class represents a sell transaction.
     """
 
-    def __init__(self, product: Product, quantity: int, value: float):
+    def __init__(self, product, quantity: int, value: float):
         super().__init__(product)
         self.quantity = quantity
         self.value = value
@@ -40,7 +37,7 @@ class RestockTransaction(Transaction):
     This class represents a restock transaction.
     """
 
-    def __init__(self, product: Product, quantity: int, value: float):
+    def __init__(self, product, quantity: int, value: float):
         super().__init__(product)
         self.quantity = quantity
         self.value = value
@@ -57,7 +54,7 @@ class AddTransaction(Transaction):
     This class represents an add transaction.
     """
 
-    def __init__(self, product: Product):
+    def __init__(self, product):
         super().__init__(product)
 
     def __str__(self):

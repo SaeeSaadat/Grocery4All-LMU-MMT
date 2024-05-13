@@ -1,6 +1,7 @@
 import logging
 from typing import Optional, List
-from database_manager import product as product_db, transactions as transaction_db
+from database_manager import product as product_db
+from database_manager import transactions as transaction_db
 from inventory.Exceptions import NotEnoughProductInStock
 from inventory.transactions import Transaction, SellTransaction, RestockTransaction, AddTransaction
 

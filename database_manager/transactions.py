@@ -2,7 +2,6 @@ import logging
 from typing import List
 
 from database_manager import _get_connection_and_cursor
-from inventory.product import Product
 from inventory.transactions import Transaction, SellTransaction, RestockTransaction, AddTransaction
 
 
@@ -15,16 +14,16 @@ def save_transaction_to_database(transaction_type: str, product_id: int, quantit
     :param value: How much money is involved in the transaction (0.0 for `Add`)
     """
     with _get_connection_and_cursor(commit=True) as (_, cursor):
-        cursor.execute("INSERT INTO transactions (type, product_id, quantity, total_price) VALUES (?, ?, ?, ?)",
+        cursor.execute("INSERT INTO transactions (type, product_id, quantity, total_value) VALUES (?, ?, ?, ?)",
                        (transaction_type, product_id, quantity, value))
     logging.info("Saved new %s transaction with id #%d object for product #%d to the database",
                  transaction_type, cursor.lastrowid, product_id)
 
 
-def get_all_product_transactions(product: Product) -> List[Transaction]:
+def get_all_product_transactions(product) -> List[Transaction]:
     """
     gets all the transactions related to the given product
-    :param product: the product in question
+    :param product: the product object of the product in question
     :return: list of transactions
     """
     with _get_connection_and_cursor(return_dict=True) as (_, cursor):
