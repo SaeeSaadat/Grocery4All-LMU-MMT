@@ -39,7 +39,8 @@ class Product:
         self.quantity += quantity
         # Register the quantity change in the database
         product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
-        RestockTransaction(self, quantity).save_to_database()  # Register the transaction in the database
+        # Register the transaction in the database
+        RestockTransaction(self, quantity, value=quantity * self.purchase_price).save_to_database()
 
     def sell(self, quantity: int):
         if quantity > self.quantity:  # Check if the transaction is possible
@@ -49,7 +50,8 @@ class Product:
 
         # Register the quantity change in the database
         product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
-        SellTransaction(self, quantity).save_to_database()  # Register the transaction in the database
+        # Register the transaction in the database
+        SellTransaction(self, quantity, value=quantity*self.selling_price).save_to_database()
 
     def get_transactions(self) -> List[Transaction]:
         return transaction_db.get_all_product_transactions(self)
