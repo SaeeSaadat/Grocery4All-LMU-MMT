@@ -2,6 +2,8 @@
 
 ### Because everyone needs groceries, ours is just smarter +_+
 
+[Link to the GitHub Repository](https://github.com/SaeeSaadat/Grocery4All-LMU-MMT.git)
+
 \
 This project is part of the Ludwig Maximilians University's MMT program's essay assignment
 for the winter semester of 2024/25
