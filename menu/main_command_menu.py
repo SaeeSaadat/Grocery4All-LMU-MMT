@@ -4,6 +4,7 @@ from inventory import inventory
 from menu.command_menu import CommandMenu
 from menu.calculator_command_menu import CalculatorCommandMenu
 import database_manager
+from database_manager import history as history_db
 
 
 class MainCommandMenu(CommandMenu):
@@ -31,7 +32,14 @@ class MainCommandMenu(CommandMenu):
         elif command == "restock":
             pass
         elif command == "history":
-            print("History")
+            print("\nYour command history: \n----------------------------------------\n")
+            limit = 10
+            if len(arguments) > 0 and arguments[0].isdigit() and int(arguments[0]) > 0:
+                limit = int(arguments[0])
+            for command in history_db.get_history(limit, include_timestamp=True):
+                print(f'{command[1]}: \t {command[0]}')
+            print("\n----------------------------------------\n")
+
         elif command == "calculator":
             print("Entering Calculator Mode")
             return CalculatorCommandMenu(self)
