@@ -32,13 +32,7 @@ class MainCommandMenu(CommandMenu):
         elif command == "restock":
             pass
         elif command == "history":
-            print("\nYour command history: \n----------------------------------------\n")
-            limit = 10
-            if len(arguments) > 0 and arguments[0].isdigit() and int(arguments[0]) > 0:
-                limit = int(arguments[0])
-            for command in history_db.get_history(limit, include_timestamp=True):
-                print(f'{command[1]}: \t {command[0]}')
-            print("\n----------------------------------------\n")
+            MainCommandMenu.show_history(arguments)
 
         elif command == "calculator":
             print("Entering Calculator Mode")
@@ -48,3 +42,13 @@ class MainCommandMenu(CommandMenu):
             database_manager.insert_mock_data()
 
         return self
+
+    @staticmethod
+    def show_history(arguments):
+        print("\nYour command history: \n----------------------------------------\n")
+        limit = 10
+        if len(arguments) > 0 and arguments[0].isdigit() and int(arguments[0]) > 0:
+            limit = int(arguments[0])
+        for command in history_db.get_history(limit, include_timestamp=True):
+            print(f'{command[1]}: \t {command[0]}')
+        print("\n----------------------------------------\n")
