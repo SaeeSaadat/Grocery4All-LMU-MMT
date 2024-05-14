@@ -1,4 +1,5 @@
 import logging
+import readline
 from utilities import print_message, clear_terminal
 import database_manager
 from database_manager.Exceptions import DatabaseAlreadyExistsException

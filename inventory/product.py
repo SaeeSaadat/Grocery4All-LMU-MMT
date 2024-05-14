@@ -1,6 +1,6 @@
 import logging
 from typing import Optional, List, Tuple
-from database_manager import product as product_db
+
 from database_manager import transactions as transaction_db
 from inventory.Exceptions import NotEnoughProductInStock
 from inventory.transactions import Transaction, SellTransaction, RestockTransaction, AddTransaction
@@ -30,7 +30,7 @@ class Product:
         :param product_id: product id
         :return: the product object, if available in the database, None otherwise.
         """
-        return product_db.get_product_by_id(product_id)
+        return get_product_by_id(product_id)
 
     @staticmethod
     def get_all_products(only_available: bool = False) -> List['Product']:
@@ -39,16 +39,16 @@ class Product:
         :param only_available: if True, only available products will be returned
         :return: list of products
         """
-        return product_db.get_all_products(only_available)
+        return get_all_products(only_available)
 
     def add_to_database(self):
-        self.product_id = product_db.add_product_to_database(self)  # Register the product in the database
+        self.product_id = add_product_to_database(self)  # Register the product in the database
         AddTransaction(self).save_to_database()  # Register the transaction in the database
 
     def restock(self, quantity: int):
         self.quantity += quantity
         # Register the quantity change in the database
-        product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
+        update_product_quantity_in_inventory(self.product_id, self.quantity)
         # Register the transaction in the database
         RestockTransaction(self, quantity, value=quantity * self.purchase_price).save_to_database()
 
@@ -59,7 +59,7 @@ class Product:
         self.quantity -= quantity
 
         # Register the quantity change in the database
-        product_db.update_product_quantity_in_inventory(self.product_id, self.quantity)
+        update_product_quantity_in_inventory(self.product_id, self.quantity)
         # Register the transaction in the database
         SellTransaction(self, quantity, value=quantity * self.selling_price).save_to_database()
 
@@ -105,3 +105,7 @@ class Product:
         description += f"\tTotal Purchase Cost: {self.get_purchased_value()}\n"
         description += f"\tTotal Balance: {self.get_purchased_value()}"
         return description
+
+
+from database_manager.product import get_product_by_id, get_all_products, add_product_to_database
+from database_manager.product import update_product_quantity_in_inventory

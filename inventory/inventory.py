@@ -16,7 +16,7 @@ def get_inventory_products_list_string(only_available: bool = False) -> str:
         result += prd.get_full_description(show_zero_quantity=False) + "\n"
     if only_available:
         return result
-    result += "Out of Stock Products:\n"
+    result += "\n--------------------\n\nOut of Stock Products:\n\n"
     for prd in filter(lambda x: x.quantity == 0, all_products):
         result += prd.get_full_description(show_zero_quantity=False) + "\n"
     return result

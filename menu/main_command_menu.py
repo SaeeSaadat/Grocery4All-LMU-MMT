@@ -1,3 +1,5 @@
+from typing import List
+
 from inventory import inventory
 from menu.command_menu import CommandMenu
 from menu.calculator_command_menu import CalculatorCommandMenu
@@ -8,7 +10,7 @@ class MainCommandMenu(CommandMenu):
     commands = {
         "inventory",
         "products",
-        "new product",
+        "add",
         "sell",
         "restock",
         "history",
@@ -17,7 +19,7 @@ class MainCommandMenu(CommandMenu):
     }
     help_menu_file = 'resources/help_message.txt'  # Address of the text file containing relevant instructions!
 
-    def handle_custom_commands(self, command: str) -> CommandMenu:
+    def handle_custom_commands(self, command: str, arguments: List[str]) -> CommandMenu:
         if command == "inventory":
             print(inventory.get_inventory_info_string())
         elif command == "products":

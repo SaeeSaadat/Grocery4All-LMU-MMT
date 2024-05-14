@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 import logging
 
 import utilities
@@ -30,7 +30,7 @@ class CommandMenu:
     def show_help(self):
         utilities.print_message(self.__class__.help_menu_file)
 
-    def handle_custom_commands(self, command: str) -> 'CommandMenu':
+    def handle_custom_commands(self, command: str, arguments: List[str]) -> 'CommandMenu':
         raise Exception("handle_custom_commands method is not implemented!")
 
     def handle_command(self, command: str) -> 'CommandMenu':
@@ -41,6 +41,9 @@ class CommandMenu:
         :param command: the command in question!
         :return: the next menu for the next command.
         """
+        # The first word is the command, the rest are arguments (optional).
+        command, *arguments = command.split()
+        # TODO: Register command in history!
 
         if command == 'back':
             if self.prv_menu is None:
@@ -58,6 +61,6 @@ class CommandMenu:
             print("Command not recognized.")
             logging.warning("Command %s not recognized", command)
         else:
-            return self.handle_custom_commands(command)
+            return self.handle_custom_commands(command, arguments)
 
         return self
