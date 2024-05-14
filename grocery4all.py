@@ -40,12 +40,13 @@ def start():
     menu = MainCommandMenu()
     try:
         while True:
-            command = input("\nCommand> \t").lower()
+            print(f'\n[ {menu.get_path_to_menu()} ]')
+            command = input("  > \t").lower()
             if command == "exit":
                 logging.warning("Exiting the program by user's request!")
                 graceful_exit()
                 break
-            else:
+            elif command:
                 menu = menu.handle_command(command)
 
     except KeyboardInterrupt:

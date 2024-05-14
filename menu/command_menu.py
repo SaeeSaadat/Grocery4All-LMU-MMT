@@ -14,6 +14,7 @@ class CommandMenu:
     """
 
     commands = {'help, clear'}  # Set of available commands for the menu.
+    menu_name = 'Menu'  # Name of the menu.
     help_menu_file = 'resources/help_message.txt'  # Address of the text file containing relevant instructions!
 
     @staticmethod
@@ -25,7 +26,16 @@ class CommandMenu:
         self.prv_menu = prv_menu
 
     def __str__(self):
-        return f'{self.__class__.__name__}'
+        return f'{self.__class__.menu_name}'
+
+    def get_path_to_menu(self) -> str:
+        """
+        This method is used to get the path to the current menu.
+        :return: the path to the menu.
+        """
+        if self.prv_menu is None:
+            return str(self)
+        return f'{self.prv_menu.get_path_to_menu()} > {self}'
 
     def show_help(self):
         utilities.print_message(self.__class__.help_menu_file)
@@ -47,18 +57,18 @@ class CommandMenu:
 
         if command == 'back':
             if self.prv_menu is None:
-                print("You're in the first page!")
+                utilities.print_warning("You're in the first page!")
                 logging.warning("User tried to go back in menu %s but there was no prv menu!", self)
             else:
                 logging.debug("user returned to previous menu: %s", self.prv_menu)
-                print("Going back to", self.prv_menu)
+                utilities.print_warning(f"Going back to {self.prv_menu}")
                 return self.prv_menu
         elif command == 'clear':
             utilities.clear_terminal()
         elif command == 'help':
             self.show_help()
         elif command not in self.commands:
-            print("Command not recognized.")
+            utilities.print_warning("Command not recognized.")
             logging.warning("Command %s not recognized", command)
         else:
             return self.handle_custom_commands(command, arguments)

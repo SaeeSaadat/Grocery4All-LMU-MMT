@@ -5,6 +5,7 @@ from menu.command_menu import CommandMenu
 from menu.calculator_command_menu import CalculatorCommandMenu
 import database_manager
 from database_manager import history as history_db
+from utilities import print_warning
 
 
 class MainCommandMenu(CommandMenu):
@@ -18,6 +19,7 @@ class MainCommandMenu(CommandMenu):
         "calculator",
         "mock",
     }
+    menu_name = "Main Menu"
     help_menu_file = 'resources/help_message.txt'  # Address of the text file containing relevant instructions!
 
     def handle_custom_commands(self, command: str, arguments: List[str]) -> CommandMenu:
@@ -26,19 +28,24 @@ class MainCommandMenu(CommandMenu):
         elif command == "products":
             print(inventory.get_inventory_products_list_string())
         elif command == "add":
-            product_manager.add_product_sequence()
+            try:
+                product_manager.add_product_sequence()
+            except KeyboardInterrupt:
+                # Each sequence can be cancelled using ctrl+c
+                print_warning("Add Operation Cancelled!")
         elif command == "sell":
-            pass
+            try:
+                product_manager.sell_product_sequence()
+            except KeyboardInterrupt:
+                print_warning("Sell Operation Cancelled!")
         elif command == "restock":
             pass
         elif command == "history":
             MainCommandMenu.show_history(arguments)
-
         elif command == "calculator":
-            print("Entering Calculator Mode")
+            print_warning("Entering Calculator Mode")
             return CalculatorCommandMenu(self)
         elif command == "mock":
-            # Fills the database with mock data, using the database_manager/mock_data.sql script.
             database_manager.insert_mock_data()
 
         return self

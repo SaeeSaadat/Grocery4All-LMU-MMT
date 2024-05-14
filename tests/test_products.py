@@ -51,6 +51,8 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 10)
         product.restock(100)
         self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity + 110)
+        self.assertRaises(Exception, product.restock, 0)
+        self.assertRaises(Exception, product.restock, -10)
 
     def test_sell_product(self):
         product = Product.get_product_from_database(1)
@@ -61,3 +63,5 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(Product.get_product_from_database(1).quantity, prv_quantity - 110)
         product.sell(product.quantity)
         self.assertRaises(NotEnoughProductInStock, product.sell, 1)
+        self.assertRaises(Exception, product.sell, 0)
+        self.assertRaises(Exception, product.sell, -10)

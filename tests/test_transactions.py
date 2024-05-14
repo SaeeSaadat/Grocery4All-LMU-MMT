@@ -22,6 +22,35 @@ class TestProducts(unittest.TestCase):
             'ketchup',
             1.0,
             2.0,
+            quantity=0
+        )
+        new_product.add_to_database()
+        self.assertEqual(1,
+                         len(
+                             list(
+                                 filter(
+                                     lambda x: x.__class__.__name__ == 'AddTransaction', new_product.get_transactions()
+                                 )
+                             )
+                         )
+                         )
+        # Adding a product with quantity 0 should not trigger a restock transaction
+        self.assertEqual(0,
+                         len(
+                             list(
+                                 filter(
+                                     lambda x: x.__class__.__name__ == 'RestockTransaction',
+                                     new_product.get_transactions()
+                                 )
+                             )
+                         )
+                         )
+
+    def test_add_and_restock_product(self):
+        new_product = Product(
+            'ketchup',
+            1.0,
+            2.0,
             quantity=20
         )
         new_product.add_to_database()
@@ -30,6 +59,17 @@ class TestProducts(unittest.TestCase):
                              list(
                                  filter(
                                      lambda x: x.__class__.__name__ == 'AddTransaction', new_product.get_transactions()
+                                 )
+                             )
+                         )
+                         )
+        # Adding a product with quantity more than 0 should trigger a restock transaction
+        self.assertEqual(1,
+                         len(
+                             list(
+                                 filter(
+                                     lambda x: x.__class__.__name__ == 'RestockTransaction',
+                                     new_product.get_transactions()
                                  )
                              )
                          )

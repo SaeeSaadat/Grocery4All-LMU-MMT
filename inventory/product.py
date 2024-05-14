@@ -41,29 +41,42 @@ class Product:
         """
         return get_all_products(only_available)
 
-    def add_to_database(self):
+    def add_to_database(self) -> Transaction:
         self.product_id = add_product_to_database(self)  # Register the product in the database
-        AddTransaction(self).save_to_database()  # Register the transaction in the database
+        transaction = AddTransaction(self)
+        transaction.save_to_database()  # Register the transaction in the database
         if self.quantity > 0:
-            self.restock(self.quantity)
+            return self.restock(self.quantity)
+        return transaction
 
-    def restock(self, quantity: int):
+    def restock(self, quantity: int) -> RestockTransaction:
+        if quantity <= 0:
+            raise Exception("Quantity should be a positive number!")
         self.quantity += quantity
+
+        logging.info(f"{quantity} Units of product {self.name} restocked.")
         # Register the quantity change in the database
         update_product_quantity_in_inventory(self.product_id, self.quantity)
         # Register the transaction in the database
-        RestockTransaction(self, quantity, value=quantity * self.purchase_price).save_to_database()
+        transaction = RestockTransaction(self, quantity, value=quantity * self.purchase_price)
+        transaction.save_to_database()
+        return transaction
 
-    def sell(self, quantity: int):
+    def sell(self, quantity: int) -> SellTransaction:
         if quantity > self.quantity:  # Check if the transaction is possible
             logging.warning("Not enough product in stock to sell %d units of %s", quantity, self.name)
             raise NotEnoughProductInStock
+        if quantity <= 0:
+            raise Exception("Quantity should be a positive number!")
         self.quantity -= quantity
 
+        logging.info(f"{quantity} Units of product {self.name} sold.")
         # Register the quantity change in the database
         update_product_quantity_in_inventory(self.product_id, self.quantity)
         # Register the transaction in the database
-        SellTransaction(self, quantity, value=quantity * self.selling_price).save_to_database()
+        transaction = SellTransaction(self, quantity, value=quantity * self.selling_price)
+        transaction.save_to_database()
+        return transaction
 
     def get_transactions(self) -> List[Transaction]:
         return transaction_db.get_all_product_transactions(self)

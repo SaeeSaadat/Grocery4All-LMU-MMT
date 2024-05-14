@@ -12,6 +12,7 @@ class CalculatorCommandMenu(CommandMenu):
         "cost",
         "profit",
     }
+    menu_name = "Calculator"
     help_menu_file = 'resources/calculator_help_message.txt'
 
     def handle_custom_commands(self, command: str) -> CommandMenu:
