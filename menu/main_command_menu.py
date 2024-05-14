@@ -18,6 +18,9 @@ class MainCommandMenu(CommandMenu):
         "history",
         "calculator",
         "mock",
+        "backup",
+        "reset",
+        "restore"
     }
     menu_name = "Main Menu"
     help_menu_file = 'resources/help_message.txt'  # Address of the text file containing relevant instructions!
@@ -52,17 +55,23 @@ class MainCommandMenu(CommandMenu):
             database_manager.insert_mock_data()
         elif command == "reset":
             print_warning("This will reset the database and all the data will be lost!")
-            confirm = input("Are you sure you want to reset the database? (yes/no) > ")
-            if confirm.lower() == "yes":
-                database_manager.reset_database()
-                print("Database reset successfully!")
-                print("you may restore the previous data using the 'restore' command.")
+            try:
+                confirm = input("Are you sure you want to reset the database? (yes/no) > ")
+                if confirm.lower() == "yes":
+                    database_manager.reset_database()
+                    print("Database reset successfully!")
+                    print("you may restore the previous data using the 'restore' command.")
+            except KeyboardInterrupt:
+                print("Reset Operation Cancelled!")
         elif command == "restore":
             print_warning("This will restore the previous data from the backup!")
-            confirm = input("Are you sure you want to restore the previous data? (yes/no) > ")
-            if confirm.lower() == "yes":
-                database_manager.restore_database()
-                print("Database restored successfully!")
+            try:
+                confirm = input("Are you sure you want to restore the previous data? (yes/no) > ")
+                if confirm.lower() == "yes":
+                    database_manager.restore_database()
+                    print("Database restored successfully!")
+            except KeyboardInterrupt:
+                print("Restore Operation Cancelled!")
 
         return self
 

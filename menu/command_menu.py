@@ -53,7 +53,7 @@ class CommandMenu:
         """
         # The first word is the command, the rest are arguments (optional).
         command, *arguments = command.split()
-        # TODO: Register command in history!
+        CommandMenu.record_command_in_history(command)
 
         if command == 'back':
             if self.prv_menu is None:
