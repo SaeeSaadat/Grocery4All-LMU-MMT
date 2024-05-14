@@ -44,6 +44,8 @@ class Product:
     def add_to_database(self):
         self.product_id = add_product_to_database(self)  # Register the product in the database
         AddTransaction(self).save_to_database()  # Register the transaction in the database
+        if self.quantity > 0:
+            self.restock(self.quantity)
 
     def restock(self, quantity: int):
         self.quantity += quantity
@@ -74,16 +76,16 @@ class Product:
         return self.quantity * self.selling_price
 
     def get_how_many_sold(self) -> int:
-        return transaction_db.get_product_sold_count(self.product_id)
+        return transaction_db.get_product_sold_count(self.product_id) or 0
 
     def get_sold_value(self) -> float:
-        return transaction_db.get_product_sold_value(self.product_id)
+        return transaction_db.get_product_sold_value(self.product_id) or 0
 
     def get_how_many_purchased(self) -> int:
-        return transaction_db.get_product_purchased_count(self.product_id)
+        return transaction_db.get_product_purchased_count(self.product_id) or 0
 
     def get_purchased_value(self) -> float:
-        return transaction_db.get_product_purchased_value(self.product_id)
+        return transaction_db.get_product_purchased_value(self.product_id) or 0
 
     def get_total_balance(self) -> float:
         """

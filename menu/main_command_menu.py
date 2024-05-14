@@ -1,6 +1,6 @@
 from typing import List
 
-from inventory import inventory
+from inventory import inventory, product_manager
 from menu.command_menu import CommandMenu
 from menu.calculator_command_menu import CalculatorCommandMenu
 import database_manager
@@ -26,7 +26,7 @@ class MainCommandMenu(CommandMenu):
         elif command == "products":
             print(inventory.get_inventory_products_list_string())
         elif command == "add":
-            print("add product")
+            product_manager.add_product_sequence()
         elif command == "sell":
             pass
         elif command == "restock":

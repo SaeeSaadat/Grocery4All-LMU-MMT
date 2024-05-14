@@ -36,8 +36,8 @@ def add_product_to_database(product: Product) -> Optional[int]:
     """
     with _get_connection_and_cursor(commit=True) as (conn, cursor):
         try:
-            cursor.execute("INSERT INTO products (name, purchase_price, selling_price) VALUES (?, ?, ?)",
-                           (product.name, product.purchase_price, product.selling_price))
+            cursor.execute("INSERT INTO products (name, purchase_price, selling_price, quantity) VALUES (?, ?, ?, ?)",
+                           (product.name, product.purchase_price, product.selling_price, product.quantity))
         except sqlite3.IntegrityError as e:
             raise ProductExistsInDatabase from e
         logging.info("Saved new product object %s to the database", product.name)
