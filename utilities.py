@@ -85,10 +85,11 @@ def int_input(input_message: str,
     :param default: The default value to return if the answer is empty
     :return: the entered input as an integer (or None if input was empty)
     """
+    validator = (lambda x: validation_function(int(x))) if validation_function else (lambda x: int(x) == int(x))
     res = get_valid_input(input_message,
                           allow_empty,
                           error_message,
-                          validation_function=(lambda x: validation_function(int(x))) if validation_function else None
+                          validation_function=validator
                           )
     return int(res) if res else default
 
@@ -102,10 +103,11 @@ def float_input(input_message: str,
     """
     Same as int_input, but for floats!
     """
+    validator = (lambda x: validation_function(float(x))) if validation_function else (lambda x: float(x) == float(x))
     res = get_valid_input(input_message,
                           allow_empty,
                           error_message,
-                          validation_function=(lambda x: validation_function(float(x))) if validation_function else None
+                          validation_function=validator
                           )
 
     return float(res) if res else default
