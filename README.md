@@ -52,6 +52,16 @@ python3 grocery4all.py
 The program will act as a shell, meaning once it's run, it will stay live in an infinite loop, and exits only after it
 receives the `exit` command or the `ctrl+c` signal.
 
+The program will start in the main menu.
+- Some of the commands will immediately produce an output such as `inventory`
+- Some commands will start a sequence, such as `add` or `sell`.
+  - In these sequences the user will be asked to provide the appropriate information regarding that operation.
+  - These sequences can be cancelled using the `ctrl+c` keyboard interruption.
+- Other commands such as `calculator` will redirect the user to a new menu with new available commands.
+  - The user may go back to the main menu using the `back` command.
+
+
+
 ---
 
 ## Database Persistence:
