@@ -3,6 +3,7 @@ This module is used to implement the calculations of the calculator mode.
 """
 from database_manager import transactions
 from inventory.product import Product
+from inventory.transactions import RestockTransaction
 
 
 def calculate_total_revenue() -> float:
@@ -24,8 +25,15 @@ def calculate_total_value() -> float:
 
 
 def calculate_total_cost() -> float:
-    # TODO
-    pass
+    """
+    This function calculates the total cost of the inventory.
+    These costs have been calculated by summing up the total value of all the restock transactions.
+    :return:
+    """
+    cost = 0.0
+    for transaction in RestockTransaction.get_recent_transactions(None):
+        cost += transaction['total_value']
+    return cost
 
 
 def calculate_total_profit() -> float:

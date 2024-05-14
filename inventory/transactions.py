@@ -16,7 +16,7 @@ class Transaction:
         raise Exception("Not Implemented in the subclass!")
 
     @staticmethod
-    def get_recent_transactions(limit: int = 10) -> List[dict]:
+    def get_recent_transactions(limit: Optional[int] = 10) -> List[dict]:
         return transaction_db.get_transactions(limit=limit)
 
 
@@ -43,7 +43,7 @@ class SellTransaction(Transaction):
                                                                           )
 
     @staticmethod
-    def get_recent_transactions(limit: int = 10):
+    def get_recent_transactions(limit: Optional[int] = 10) -> List[dict]:
         return transaction_db.get_transactions('Sell', limit)
 
 
@@ -68,8 +68,8 @@ class RestockTransaction(Transaction):
                                                                           )
 
     @staticmethod
-    def get_recent_transactions(limit: int = 10):
-        transaction_db.get_transactions('Restock', limit)
+    def get_recent_transactions(limit: Optional[int] = 10) -> List[dict]:
+        return transaction_db.get_transactions('Restock', limit)
 
 
 class AddTransaction(Transaction):
@@ -87,5 +87,5 @@ class AddTransaction(Transaction):
         self.transaction_id = transaction_db.save_transaction_to_database('Add', self.product.product_id)
 
     @staticmethod
-    def get_recent_transactions(limit: int = 10):
-        transaction_db.get_transactions('Add', limit)
+    def get_recent_transactions(limit: Optional[int] = 10) -> List[dict]:
+        return transaction_db.get_transactions('Add', limit)

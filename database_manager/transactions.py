@@ -32,10 +32,15 @@ def get_transactions(transaction_type: Optional[str] = None, limit: int = 10) ->
     query = "SELECT * FROM transactions"
     if transaction_type:
         query += f" WHERE type = '{transaction_type}'"
+
     query += " ORDER BY ROWID DESC"
+
+    if limit:
+        query += f" LIMIT {limit}"
+
     with _get_connection_and_cursor(return_dict=True) as (_, cursor):
         cursor.execute(query)
-        return cursor.fetchmany(limit)
+        return cursor.fetchall()
 
 
 def get_all_product_transactions(product) -> List[Transaction]:
