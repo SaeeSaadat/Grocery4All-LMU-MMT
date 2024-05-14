@@ -22,3 +22,12 @@ def clear_terminal():
     if os.name == "nt":  # Windows
         command = "cls"
     os.system(command)
+
+
+def get_red_string(message: str) -> str:
+    return f"\033[91m{message}\033[0m"
+
+
+def print_warning(message: str):
+    # print in red!
+    print(get_red_string(message))
