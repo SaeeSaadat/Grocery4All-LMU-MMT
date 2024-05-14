@@ -78,7 +78,7 @@ the `database_manager` directory.
 - **clear**: Clear the console
 
 ### Commands in the main menu
-- **inventory**: Display inventory information, and the products available in the inventory
+- **inventory**: Display inventory information, and the products _**available**_ in the inventory
 - **products**: Display all products
 - **add**: Add a new type of product
 - **sell**: record a sell transaction

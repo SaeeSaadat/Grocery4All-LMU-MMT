@@ -24,7 +24,7 @@ class MainCommandMenu(CommandMenu):
         if command == "inventory":
             print(inventory.get_inventory_info_string())
         elif command == "products":
-            print("Show products")
+            print(inventory.get_inventory_products_list_string())
         elif command == "add":
             print("add product")
         elif command == "sell":
