@@ -39,7 +39,10 @@ class MainCommandMenu(CommandMenu):
             except KeyboardInterrupt:
                 print_warning("Sell Operation Cancelled!")
         elif command == "restock":
-            pass
+            try:
+                product_manager.restock_product_sequence()
+            except KeyboardInterrupt:
+                print_warning("Sell Operation Cancelled!")
         elif command == "history":
             MainCommandMenu.show_history(arguments)
         elif command == "calculator":
