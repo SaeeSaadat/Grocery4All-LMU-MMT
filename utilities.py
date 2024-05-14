@@ -35,9 +35,10 @@ def print_warning(message: str):
 
 
 def get_valid_input(input_message: str,
-                    allow_empty: bool = True,
+                    allow_empty: bool = False,
                     error_message: str = 'Please provide a valid input!',
-                    validation_function: callable = None
+                    validation_function: callable = None,
+                    default: str = ''
                     ) -> str:
     """
     This function will take an input from the user and checks if it's valid.
@@ -46,6 +47,7 @@ def get_valid_input(input_message: str,
     :param allow_empty: if true, an empty input from the user will be accepted
     :param error_message: The error message to be displayed if the input is not an integer
     :param validation_function: a function that will check the input value for additional conditions
+    :param default: The default value to return if the answer is empty
     :return: the entered input as an integer (or None if input was empty)
     """
     while True:
@@ -56,7 +58,7 @@ def get_valid_input(input_message: str,
                 print(error_message)
                 continue
             else:
-                return answer
+                return default
         try:
             if validation_function is not None and not validation_function(answer):
                 print(error_message)
@@ -68,9 +70,10 @@ def get_valid_input(input_message: str,
 
 
 def int_input(input_message: str,
-              allow_empty: bool = True,
+              allow_empty: bool = False,
               error_message: str = 'Please provide a valid number',
-              validation_function: callable = None
+              validation_function: callable = None,
+              default: Optional[int] = None
               ) -> Optional[int]:
     """
     This function will take an integer input from the user.
@@ -79,6 +82,7 @@ def int_input(input_message: str,
     :param allow_empty: if true, an empty input from the user will be accepted
     :param error_message: The error message to be displayed if the input is not an integer
     :param validation_function: a function that will check the input value for additional conditions
+    :param default: The default value to return if the answer is empty
     :return: the entered input as an integer (or None if input was empty)
     """
     res = get_valid_input(input_message,
@@ -86,13 +90,14 @@ def int_input(input_message: str,
                           error_message,
                           validation_function=lambda x: validation_function(int(x))
                           )
-    return int(res) if res else None
+    return int(res) if res else default
 
 
 def float_input(input_message: str,
-                allow_empty: bool = True,
+                allow_empty: bool = False,
                 error_message: str = 'Please provide a valid number',
-                validation_function: callable = None
+                validation_function: callable = None,
+                default: Optional[float] = None
                 ) -> Optional[float]:
     """
     Same as int_input, but for floats!
@@ -103,4 +108,4 @@ def float_input(input_message: str,
                           validation_function=lambda x: validation_function(float(x))
                           )
 
-    return float(res) if res else None
+    return float(res) if res else default
