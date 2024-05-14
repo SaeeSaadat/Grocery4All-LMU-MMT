@@ -2,6 +2,7 @@
 This module is used to implement the calculations of the calculator mode.
 """
 from database_manager import transactions
+from inventory.product import Product
 
 
 def calculate_total_revenue() -> float:
@@ -13,9 +14,13 @@ def calculate_total_revenue() -> float:
         revenue += total_value
     return revenue
 
+
 def calculate_total_value() -> float:
-    # TODO
-    pass
+    value = 0.0
+    for product in Product.get_all_products(True):
+        value += product.get_inventory_value()
+
+    return value
 
 
 def calculate_total_cost() -> float:

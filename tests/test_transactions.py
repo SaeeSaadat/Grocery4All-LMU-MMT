@@ -104,7 +104,18 @@ class TestProducts(unittest.TestCase):
                          )
         self.assertEqual(product.get_sold_value(), 100 * product.selling_price)
 
-    def test_balance(self):
+    def test_transaction_history(self):
+        prv_len = len(Transaction.get_recent_transactions(100))
+        product = Product.get_product_from_database(1)
+        product.restock(10)
+        product.sell(5)
+        product = Product.get_product_from_database(2)
+        product.restock(10)
+        product.sell(5)
+        self.assertEqual(len(Transaction.get_recent_transactions(100)), prv_len + 4)
+        self.assertEqual(len(SellTransaction.get_recent_transactions(100)), 2)
+
+    def test_product_revenue(self):
         product = Product.get_product_from_database(1)
         stock_value = product.get_purchased_value()
         product.restock(10)
@@ -126,13 +137,18 @@ class TestProducts(unittest.TestCase):
         self.assertEqual(calculations.calculate_total_revenue(),
                          initial_value + 6 * product.selling_price - product.purchase_price * 6)
 
-    def test_transaction_history(self):
-        prv_len = len(Transaction.get_recent_transactions(100))
+    def test_inventory_value(self):
+        initial_value = calculations.calculate_total_value()
         product = Product.get_product_from_database(1)
-        product.restock(10)
-        product.sell(5)
+        product.restock(1)
+        self.assertEqual(calculations.calculate_total_value(), initial_value + product.purchase_price)
+        initial_value = calculations.calculate_total_value()
         product = Product.get_product_from_database(2)
-        product.restock(10)
-        product.sell(5)
-        self.assertEqual(len(Transaction.get_recent_transactions(100)), prv_len + 4)
-        self.assertEqual(len(SellTransaction.get_recent_transactions(100)), 2)
+        product.restock(6)
+        self.assertEqual(calculations.calculate_total_value(), initial_value + product.purchase_price * 6)
+        initial_value = calculations.calculate_total_value()
+        product = Product('ketchup', 100.0, 2.0, quantity=0)
+        product.add_to_database()
+        product.restock(100)
+        product.sell(1)
+        self.assertEqual(calculations.calculate_total_value(), initial_value + 100 * 99)

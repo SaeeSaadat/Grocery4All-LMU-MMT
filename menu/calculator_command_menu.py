@@ -29,5 +29,5 @@ class CalculatorCommandMenu(CommandMenu):
             result = calculations.calculate_total_profit()
 
         logging.info("Calculation of %s resulted in %f", command, result)
-        print(f"The total {command} of the inventory is: \t {result}")
+        print(f"The total {command} of the inventory is: \t {result}$")
         return self

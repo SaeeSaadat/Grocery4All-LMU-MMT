@@ -84,9 +84,9 @@ class Product:
     def get_inventory_value(self) -> float:
         """
         This method will return how much the available product in the inventory is worth.
-        :return: quantity * selling_price
+        :return: quantity * purchase price
         """
-        return self.quantity * self.selling_price
+        return self.quantity * self.purchase_price
 
     def get_how_many_sold(self) -> int:
         return transaction_db.get_product_sold_count(self.product_id) or 0
