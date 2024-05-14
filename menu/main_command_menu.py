@@ -66,7 +66,7 @@ class MainCommandMenu(CommandMenu):
                     print("Database reset successfully!")
                     print("you may restore the previous data using the 'restore' command.")
             except KeyboardInterrupt:
-                print("Reset Operation Cancelled!")
+                print("Reset Operation Cancelled!\n")
         elif command == "restore":
             print_warning("This will restore the previous data from the backup!")
             try:
@@ -74,8 +74,10 @@ class MainCommandMenu(CommandMenu):
                 if confirm.lower() == "yes":
                     database_manager.restore_database()
                     print("Database restored successfully!")
+            except FileNotFoundError:
+                print_warning("No backup file found! Please make sure to create a backup before restoring.")
             except KeyboardInterrupt:
-                print("Restore Operation Cancelled!")
+                print("Restore Operation Cancelled!\n")
 
         return self
 

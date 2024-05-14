@@ -77,6 +77,9 @@ directory, which will add 13 products to the inventory.
 If the user exists the program, the next time it's run, it will automatically load the last inventory that was used.
 If you wish to clear the database, you may either run the `reset` command, or delete the `database.sqlite` file in
 the `database_manager` directory.
+
+There are `backup` and `restore` functionalities available as well!
+
 ---
 
 ## List of available commands
@@ -107,8 +110,10 @@ The following list explains the functionality of each command.
 - **calculator**: Go to the calculation mode
 
 - **reset**: Reset to factory settings
+- **backup**: Create a backup file of the database
+- **restore**: Restore the database from the backup file
 - **mock**: Fill the database with mock data
-- **manual** initiation: Manually initiate a new database
+
 
 
 ### Commands in the calculator menu

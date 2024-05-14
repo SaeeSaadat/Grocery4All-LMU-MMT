@@ -11,6 +11,7 @@ from contextlib import contextmanager
 from typing import Optional
 
 from database_manager.Exceptions import DatabaseAlreadyExistsException
+import utilities
 
 DB_FILE_NAME = 'database_manager/database.sqlite'
 
@@ -107,6 +108,7 @@ def backup_database():
 
 def reset_database():
     # rename the current database file to backup
+    utilities.clear_terminal()
     os.rename(DB_FILE_NAME, f'{DB_FILE_NAME}.backup')
     logging.info(f"Database backup created. -> {DB_FILE_NAME}.backup")
     print(f"Database backup created. -> {DB_FILE_NAME}.backup")
@@ -114,6 +116,8 @@ def reset_database():
     logging.warning("Database reset.")
     print("Database reset successfully!")
     print("You may restore the previous data using the 'restore' command.\n")
+    inventory_name = utilities.get_valid_input("Welcome to your brand new inventory! What should we name it?  > ")
+    setup_inventory(inventory_name)
 
 
 def restore_database():
@@ -123,6 +127,8 @@ def restore_database():
     If there's no backup, it will raise an exception.
     :return:
     """
+    if not os.path.exists(f'{DB_FILE_NAME}.backup'):
+        raise FileNotFoundError("No backup file found! Please make sure to create a backup before restoring.")
     os.rename(DB_FILE_NAME, f'{DB_FILE_NAME}.backup.temp')
     os.rename(f'{DB_FILE_NAME}.backup', DB_FILE_NAME)
     os.rename(f'{DB_FILE_NAME}.backup.temp', f'{DB_FILE_NAME}.backup')

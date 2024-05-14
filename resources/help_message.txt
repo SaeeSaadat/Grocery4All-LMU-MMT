@@ -15,8 +15,9 @@ You may interact with the software using the following commands
 - calculator: Go to the calculation mode
 
 --- Danger Zone ---
-- reset: Reset to factory settings
-- mock data: Fill the database with mock data
-- manual initiation: Manually initiate a new database
+- reset: Erase everything from the database
+- backup: Create a backup file of the database
+- restore: Restore the database from the backup file
+- mock: Fill the database with mock data
 
 To cancel an operation or quit, you can use `ctrl + c` at any time.

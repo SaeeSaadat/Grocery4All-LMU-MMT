@@ -1,6 +1,5 @@
 import logging
-import readline
-from utilities import print_message, clear_terminal
+from utilities import print_message, clear_terminal, get_valid_input
 import database_manager
 from database_manager.Exceptions import DatabaseAlreadyExistsException
 from menu.main_command_menu import MainCommandMenu
@@ -26,7 +25,7 @@ def setup():
     print_message('resources/welcome_message.txt')
     try:
         database_manager.initialize_database()
-        inventory_name = input("Welcome to your brand new inventory! What should we name it?  > ")
+        inventory_name = get_valid_input("Welcome to your brand new inventory! What should we name it?  > ")
         database_manager.setup_inventory(inventory_name)
     except DatabaseAlreadyExistsException as e:
         print(f"\nWelcome back to {e.inventory_name}!\n\n")
