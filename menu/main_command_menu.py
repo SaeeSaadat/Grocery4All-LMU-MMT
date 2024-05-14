@@ -50,6 +50,19 @@ class MainCommandMenu(CommandMenu):
             return CalculatorCommandMenu(self)
         elif command == "mock":
             database_manager.insert_mock_data()
+        elif command == "reset":
+            print_warning("This will reset the database and all the data will be lost!")
+            confirm = input("Are you sure you want to reset the database? (yes/no) > ")
+            if confirm.lower() == "yes":
+                database_manager.reset_database()
+                print("Database reset successfully!")
+                print("you may restore the previous data using the 'restore' command.")
+        elif command == "restore":
+            print_warning("This will restore the previous data from the backup!")
+            confirm = input("Are you sure you want to restore the previous data? (yes/no) > ")
+            if confirm.lower() == "yes":
+                database_manager.restore_database()
+                print("Database restored successfully!")
 
         return self
 

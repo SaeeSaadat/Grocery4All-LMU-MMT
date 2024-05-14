@@ -4,6 +4,7 @@ No other module should have direct access to the database.
 This way, we can easily change the database implementation without affecting the rest of the code.
 """
 import os
+import shutil
 import sqlite3
 import logging
 from contextlib import contextmanager
@@ -41,7 +42,7 @@ def initialize_database(db_name: str = 'database.sqlite', delete_previous_db: bo
     """
     global DB_FILE_NAME
 
-    DB_FILE_NAME = f'database_manager/{db_name}'
+    DB_FILE_NAME = db_name if db_name.startswith('database_manager') else f'database_manager/{db_name}'
     # Check if database file exists
     if os.path.exists(DB_FILE_NAME) and get_inventory_name() is not None:
         if delete_previous_db:
@@ -90,3 +91,41 @@ def get_inventory_name() -> Optional[str]:
             return result[0] if result else None
         except sqlite3.OperationalError:
             return None
+
+
+def backup_database():
+    """
+    This function is used to backup the current database.
+    It will create a copy of the current database file.
+    :return:
+    """
+    # copy the current database file to a backup file
+    shutil.copyfile(DB_FILE_NAME, f'{DB_FILE_NAME}.backup')
+    logging.info(f"Database backup created. -> {DB_FILE_NAME}.backup")
+    print(f"Database backup created successfully in {DB_FILE_NAME}.backup!")
+
+
+def reset_database():
+    # rename the current database file to backup
+    os.rename(DB_FILE_NAME, f'{DB_FILE_NAME}.backup')
+    logging.info(f"Database backup created. -> {DB_FILE_NAME}.backup")
+    print(f"Database backup created. -> {DB_FILE_NAME}.backup")
+    initialize_database(DB_FILE_NAME)
+    logging.warning("Database reset.")
+    print("Database reset successfully!")
+    print("You may restore the previous data using the 'restore' command.\n")
+
+
+def restore_database():
+    """
+    This function is used to restore the database from the backup.
+    It will swap the current database with the backup.
+    If there's no backup, it will raise an exception.
+    :return:
+    """
+    os.rename(DB_FILE_NAME, f'{DB_FILE_NAME}.backup.temp')
+    os.rename(f'{DB_FILE_NAME}.backup', DB_FILE_NAME)
+    os.rename(f'{DB_FILE_NAME}.backup.temp', f'{DB_FILE_NAME}.backup')
+    logging.info("Database restored from backup.")
+    print("Database restored successfully!")
+    print("You may restore the previous data using the 'restore' command.")
