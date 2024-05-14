@@ -88,7 +88,7 @@ def int_input(input_message: str,
     res = get_valid_input(input_message,
                           allow_empty,
                           error_message,
-                          validation_function=lambda x: validation_function(int(x))
+                          validation_function=(lambda x: validation_function(int(x))) if validation_function else None
                           )
     return int(res) if res else default
 
@@ -105,7 +105,7 @@ def float_input(input_message: str,
     res = get_valid_input(input_message,
                           allow_empty,
                           error_message,
-                          validation_function=lambda x: validation_function(float(x))
+                          validation_function=(lambda x: validation_function(float(x))) if validation_function else None
                           )
 
     return float(res) if res else default
