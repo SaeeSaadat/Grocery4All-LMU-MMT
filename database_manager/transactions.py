@@ -1,5 +1,5 @@
 import logging
-from typing import List
+from typing import List, Optional
 
 from database_manager import _get_connection_and_cursor
 from inventory.transactions import Transaction, SellTransaction, RestockTransaction, AddTransaction
@@ -22,6 +22,22 @@ def save_transaction_to_database(transaction_type: str, product_id: int, quantit
     return cursor.lastrowid
 
 
+def get_transactions(transaction_type: Optional[str] = None, limit: int = 10) -> List[dict]:
+    """
+    gets recent transactions from the database
+    :param transaction_type: type of transactions required
+    :param limit: number of rows to retrieve
+    :return: list of dictionaries containing transactions info
+    """
+    query = "SELECT * FROM transactions"
+    if transaction_type:
+        query += f" WHERE type = '{transaction_type}'"
+    query += " ORDER BY ROWID DESC"
+    with _get_connection_and_cursor(return_dict=True) as (_, cursor):
+        cursor.execute(query)
+        return cursor.fetchmany(limit)
+
+
 def get_all_product_transactions(product) -> List[Transaction]:
     """
     gets all the transactions related to the given product
@@ -38,7 +54,8 @@ def get_all_product_transactions(product) -> List[Transaction]:
             elif transaction_type == 'Sell':
                 result.append(SellTransaction(product, transaction_dict['quantity'], transaction_dict['total_value']))
             elif transaction_type == 'Restock':
-                result.append(RestockTransaction(product, transaction_dict['quantity'], transaction_dict['total_value']))
+                result.append(
+                    RestockTransaction(product, transaction_dict['quantity'], transaction_dict['total_value']))
             else:
                 raise Exception('Invalid transaction type found in database!')
 

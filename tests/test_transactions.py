@@ -112,3 +112,14 @@ class TestProducts(unittest.TestCase):
         product.sell(5)
         expected_balance = 5 * product.selling_price - (stock_value + 10 * product.purchase_price)
         self.assertEqual(product.get_total_balance(), expected_balance)
+
+    def test_transaction_history(self):
+        prv_len = len(Transaction.get_recent_transactions(100))
+        product = Product.get_product_from_database(1)
+        product.restock(10)
+        product.sell(5)
+        product = Product.get_product_from_database(2)
+        product.restock(10)
+        product.sell(5)
+        self.assertEqual(len(Transaction.get_recent_transactions(100)), prv_len + 4)
+        self.assertEqual(len(SellTransaction.get_recent_transactions(100)), 2)

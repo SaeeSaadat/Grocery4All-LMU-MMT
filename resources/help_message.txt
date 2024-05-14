@@ -5,12 +5,13 @@ You may interact with the software using the following commands
 - exit: Exit the program
 - clear: Clear the console
 
-- inventory: Display inventory information, and the products available in the inventory
-- products: Display all products
+- inventory: Display inventory information, and the products AVAILABLE in the inventory
+- products: Display ALL products
+- transactions: Displays the recent transactions (transactions / transactions 20)
 - add: Add a new type of product
 - sell: record a sell transaction
 - restock: record a restock transaction
-- history: Display the transaction history
+- history: Display the command history (history / history 25)
 - calculator: Go to the calculation mode
 
 --- Danger Zone ---
@@ -18,3 +19,4 @@ You may interact with the software using the following commands
 - mock data: Fill the database with mock data
 - manual initiation: Manually initiate a new database
 
+To cancel an operation or quit, you can use `ctrl + c` at any time.

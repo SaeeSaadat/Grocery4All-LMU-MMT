@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from database_manager import transactions as transaction_db
 
@@ -14,6 +14,10 @@ class Transaction:
 
     def save_to_database(self):
         raise Exception("Not Implemented in the subclass!")
+
+    @staticmethod
+    def get_recent_transactions(limit: int = 10) -> List[dict]:
+        return transaction_db.get_transactions(limit=limit)
 
 
 class SellTransaction(Transaction):
@@ -38,6 +42,10 @@ class SellTransaction(Transaction):
                                                                           self.quantity * self.product.selling_price
                                                                           )
 
+    @staticmethod
+    def get_recent_transactions(limit: int = 10):
+        return transaction_db.get_transactions('Sell', limit)
+
 
 class RestockTransaction(Transaction):
     """
@@ -59,6 +67,10 @@ class RestockTransaction(Transaction):
                                                                           self.quantity * self.product.purchase_price
                                                                           )
 
+    @staticmethod
+    def get_recent_transactions(limit: int = 10):
+        transaction_db.get_transactions('Restock', limit)
+
 
 class AddTransaction(Transaction):
     """
@@ -73,3 +85,7 @@ class AddTransaction(Transaction):
 
     def save_to_database(self):
         self.transaction_id = transaction_db.save_transaction_to_database('Add', self.product.product_id)
+
+    @staticmethod
+    def get_recent_transactions(limit: int = 10):
+        transaction_db.get_transactions('Add', limit)

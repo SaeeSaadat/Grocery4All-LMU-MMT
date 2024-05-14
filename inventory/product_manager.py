@@ -30,7 +30,7 @@ def add_product_sequence():
         print(f"{quantity} Units of product {new_product.name} added to the inventory.")
         if isinstance(transaction, RestockTransaction):
             print(f"Transaction ID: {transaction.transaction_id}")
-            print(f"Total Value: {transaction.value}")
+            print(f"Total Value: {transaction.value}$")
     else:
         print(f"Product {new_product.name} added to the inventory.")
 
@@ -61,7 +61,7 @@ def sell_product_sequence():
         transaction = product.sell(quantity)
         print(f"{quantity} Units of product {product.name} sold.")
         print(f"Transaction ID: {transaction.transaction_id}")
-        print(f"Total Value: {transaction.value}")
+        print(f"Total Value: {transaction.value}$")
     except NotEnoughProductInStock:
         print(f"Cannot sell {quantity} units of {product.name}. Not enough in stock.")
 
@@ -89,4 +89,4 @@ def restock_product_sequence():
     transaction = product.restock(quantity)
     print(f"{quantity} Units of product {product.name} restocked.")
     print(f"Transaction ID: {transaction.transaction_id}")
-    print(f"Total Value: {transaction.value}")
+    print(f"Total Value: {transaction.value}$")

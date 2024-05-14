@@ -82,6 +82,12 @@ the `database_manager` directory.
 
 (available in the shell by running the `help` command):
 
+**Commands**: Every command is a single word. Some of the commands take _optional_ arguments
+- example: `transactions 30`, `history 5`, `history`
+
+The following list explains the functionality of each command. 
+
+
 ### Common commands in all menus:
 - **help**: Show help information
 - **exit**: Exit the program
@@ -90,10 +96,13 @@ the `database_manager` directory.
 ### Commands in the main menu
 - **inventory**: Display inventory information, and the products _**available**_ in the inventory
 - **products**: Display all products
+- **transactions**: Displays the recent transactions
+  - `transactions {n}`: shows the last `n` transactions. Defaults to 10
 - **add**: Add a new type of product
 - **sell**: record a sell transaction
 - **restock**: record a restock transaction
-- **history**: Display the transaction history
+- **history**: Display the command history
+  - `history {n}`: shows the last `n` commands from history. Defaults to 10
 - **calculator**: Go to the calculation mode
 
 - **reset**: Reset to factory settings

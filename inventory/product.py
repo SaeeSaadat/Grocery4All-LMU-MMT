@@ -116,9 +116,9 @@ class Product:
         description += f"\tSelling Price: {self.selling_price}\n"
         description += f"\tTotal Number Of Units Sold: {self.get_how_many_sold()}\n"
         description += f"\tTotal Number Of Units Purchased: {self.get_how_many_purchased()}\n"
-        description += f"\tTotal Profit: {self.get_sold_value()}\n"
-        description += f"\tTotal Purchase Cost: {self.get_purchased_value()}\n"
-        description += f"\tTotal Balance: {self.get_purchased_value()}"
+        description += f"\tTotal Profit: {self.get_sold_value()}$\n"
+        description += f"\tTotal Purchase Cost: {self.get_purchased_value()}$\n"
+        description += f"\tTotal Balance: {self.get_total_balance()}$"
         return description
 
 

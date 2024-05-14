@@ -1,4 +1,7 @@
-from inventory.product import Product as ProductClass
+from typing import Optional
+
+from inventory.product import Product
+from inventory.transactions import Transaction
 from database_manager import get_inventory_name
 
 
@@ -9,7 +12,7 @@ def get_inventory_info_string() -> str:
 
 
 def get_inventory_products_list_string(only_available: bool = False) -> str:
-    all_products = ProductClass.get_all_products(only_available)
+    all_products = Product.get_all_products(only_available)
     result = "Available Products:\n\n"
     for prd in filter(lambda x: x.quantity > 0, all_products):
         result += prd.get_full_description(show_zero_quantity=False) + "\n"
@@ -18,4 +21,22 @@ def get_inventory_products_list_string(only_available: bool = False) -> str:
     result += "\n--------------------\n\nOut of Stock Products:\n\n"
     for prd in filter(lambda x: x.quantity == 0, all_products):
         result += prd.get_full_description(show_zero_quantity=False) + "\n"
+    return result
+
+
+def get_inventory_transactions_list_string(limit: Optional[int] = 10) -> str:
+    result = "\nRecent Transactions: \n----------------------------------------\n"
+    # for transaction in transactions.get_transactions(limit=limit):
+    for transaction in Transaction.get_recent_transactions(limit=limit)[::-1]:
+        transaction_info = f'{transaction["id"]}: {transaction["type"]} Transaction: '
+        if transaction["type"] in ['Sell', 'Restock']:
+            transaction_info += f'\n\t{transaction["quantity"]} units of product #{transaction["product_id"]}'
+            transaction_info += f'\n\tTotal Value: {transaction["total_value"]}$'
+        elif transaction["type"] == 'Add':
+            transaction_info += f'\tProduct #{transaction["product_id"]}'
+        else:
+            transaction_info += f'Unknown Transaction Type: {transaction["type"]}'
+        result += transaction_info + "\n"
+    result += "\n----------------------------------------\n"
+
     return result

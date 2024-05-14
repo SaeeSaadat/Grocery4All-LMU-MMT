@@ -7,9 +7,9 @@ def record_command(command: str):
         cursor.execute("INSERT INTO command_history (command) VALUES (?)", (command,))
 
 
-def get_history(limit: int = 10, include_timestamp: bool = False) -> List[str]:
+def get_history(limit: int = 10, offset: int = 0, include_timestamp: bool = False) -> List[str]:
     with _get_connection_and_cursor(return_dict=True) as (conn, cursor):
-        cursor.execute("SELECT * FROM command_history ORDER BY ROWID DESC LIMIT ?", (limit, ))
+        cursor.execute("SELECT * FROM command_history ORDER BY ROWID DESC LIMIT ? OFFSET ?", (limit, offset))
         if include_timestamp:
             return cursor.fetchall()
         return [x[0] for x in cursor.fetchall()]

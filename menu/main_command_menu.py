@@ -12,6 +12,7 @@ class MainCommandMenu(CommandMenu):
     commands = {
         "inventory",
         "products",
+        "transactions",
         "add",
         "sell",
         "restock",
@@ -30,6 +31,9 @@ class MainCommandMenu(CommandMenu):
             print(inventory.get_inventory_info_string())
         elif command == "products":
             print(inventory.get_inventory_products_list_string())
+        elif command == "transactions":
+            limit = int(arguments[0]) if len(arguments) > 0 and arguments[0].isdigit() else 10
+            print(inventory.get_inventory_transactions_list_string(limit))
         elif command == "add":
             try:
                 product_manager.add_product_sequence()
@@ -81,6 +85,6 @@ class MainCommandMenu(CommandMenu):
         limit = 10
         if len(arguments) > 0 and arguments[0].isdigit() and int(arguments[0]) > 0:
             limit = int(arguments[0])
-        for command in history_db.get_history(limit, include_timestamp=True):
+        for command in history_db.get_history(limit, offset=1, include_timestamp=True)[::-1]:
             print(f'{command[1]}: \t {command[0]}')
         print("\n----------------------------------------\n")
