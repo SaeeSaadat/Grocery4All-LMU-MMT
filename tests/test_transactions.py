@@ -123,18 +123,18 @@ class TestProducts(unittest.TestCase):
         expected_balance = 5 * product.selling_price - (stock_value + 10 * product.purchase_price)
         self.assertEqual(product.get_total_profit(), expected_balance)
 
-    def test_inventory_revenue(self):
-        initial_value = calculations.calculate_total_revenue()
+    def test_inventory_profit(self):
+        initial_value = calculations.calculate_total_profit()
         product = Product.get_product_from_database(1)
         product.restock(1)
         product.sell(5)
-        self.assertEqual(calculations.calculate_total_revenue(),
+        self.assertEqual(calculations.calculate_total_profit(),
                          initial_value + 5 * product.selling_price - product.purchase_price)
-        initial_value = calculations.calculate_total_revenue()
+        initial_value = calculations.calculate_total_profit()
         product = Product.get_product_from_database(2)
         product.restock(6)
         product.sell(6)
-        self.assertEqual(calculations.calculate_total_revenue(),
+        self.assertEqual(calculations.calculate_total_profit(),
                          initial_value + 6 * product.selling_price - product.purchase_price * 6)
 
     def test_inventory_value(self):
@@ -153,7 +153,7 @@ class TestProducts(unittest.TestCase):
         product.sell(1)
         self.assertEqual(calculations.calculate_total_value(), initial_value + 100 * 99)
 
-    def test_inventor_total_cost(self):
+    def test_inventory_total_cost(self):
         initial_cost = calculations.calculate_total_cost()
         product = Product.get_product_from_database(1)
         product.restock(1)
@@ -168,3 +168,20 @@ class TestProducts(unittest.TestCase):
         product.add_to_database()
         product.restock(100)
         self.assertEqual(calculations.calculate_total_cost(), initial_cost + 100 * 100)
+
+    def test_total_revenue(self):
+        initial_revenue = calculations.calculate_total_revenue()
+        product = Product.get_product_from_database(1)
+        product.restock(10)
+        product.sell(1)
+        self.assertEqual(calculations.calculate_total_revenue(), initial_revenue + product.selling_price)
+        initial_revenue = calculations.calculate_total_revenue()
+        product = Product.get_product_from_database(2)
+        product.sell(6)
+        self.assertEqual(calculations.calculate_total_revenue(), initial_revenue + product.selling_price * 6)
+        initial_revenue = calculations.calculate_total_revenue()
+        product = Product('ketchup', 10.0, 20.0, quantity=0)
+        product.add_to_database()
+        product.restock(100)
+        product.sell(100)
+        self.assertEqual(calculations.calculate_total_revenue(), initial_revenue + 20 * 100)
