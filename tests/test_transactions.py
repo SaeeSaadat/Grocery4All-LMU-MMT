@@ -2,10 +2,9 @@ import unittest
 import os
 
 import database_manager
-from database_manager import product as product_db
 from inventory.product import Product
-from inventory.transactions import Transaction, SellTransaction, AddTransaction, RestockTransaction
-from inventory.Exceptions import ProductExistsInDatabase, NotEnoughProductInStock
+from inventory.transactions import Transaction, SellTransaction
+from inventory import calculations
 
 
 class TestProducts(unittest.TestCase):
@@ -111,7 +110,21 @@ class TestProducts(unittest.TestCase):
         product.restock(10)
         product.sell(5)
         expected_balance = 5 * product.selling_price - (stock_value + 10 * product.purchase_price)
-        self.assertEqual(product.get_total_balance(), expected_balance)
+        self.assertEqual(product.get_total_profit(), expected_balance)
+
+    def test_inventory_revenue(self):
+        initial_value = calculations.calculate_total_revenue()
+        product = Product.get_product_from_database(1)
+        product.restock(1)
+        product.sell(5)
+        self.assertEqual(calculations.calculate_total_revenue(),
+                         initial_value + 5 * product.selling_price - product.purchase_price)
+        initial_value = calculations.calculate_total_revenue()
+        product = Product.get_product_from_database(2)
+        product.restock(6)
+        product.sell(6)
+        self.assertEqual(calculations.calculate_total_revenue(),
+                         initial_value + 6 * product.selling_price - product.purchase_price * 6)
 
     def test_transaction_history(self):
         prv_len = len(Transaction.get_recent_transactions(100))

@@ -1,4 +1,5 @@
 import logging
+from typing import List
 
 from menu.command_menu import CommandMenu
 import database_manager
@@ -15,9 +16,10 @@ class CalculatorCommandMenu(CommandMenu):
     menu_name = "Calculator"
     help_menu_file = 'resources/calculator_help_message.txt'
 
-    def handle_custom_commands(self, command: str) -> CommandMenu:
+    def handle_custom_commands(self, command: str, arguments: List[str]) -> CommandMenu:
         result = 0
         if command == "revenue":
+            print("Calculating Total Revenue...")
             result = calculations.calculate_total_revenue()
         elif command == "value":
             result = calculations.calculate_total_value()

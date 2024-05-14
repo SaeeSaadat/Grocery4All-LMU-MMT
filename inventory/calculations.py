@@ -1,12 +1,17 @@
 """
 This module is used to implement the calculations of the calculator mode.
 """
+from database_manager import transactions
 
 
 def calculate_total_revenue() -> float:
-    # TODO
-    return 0.5
-
+    revenue: float = 0.0
+    for transaction in transactions.get_transaction_values():
+        total_value = transaction['total_value'] or 0
+        if transaction['type'] == 'Restock':
+            total_value *= -1
+        revenue += total_value
+    return revenue
 
 def calculate_total_value() -> float:
     # TODO

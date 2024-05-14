@@ -87,3 +87,9 @@ def get_product_purchased_value(product_id: int) -> float:
         cursor.execute('SELECT SUM(total_value) FROM transactions WHERE product_id = ? AND type = ?',
                        (product_id, 'Restock'))
         return cursor.fetchone()[0]
+
+
+def get_transaction_values() -> List[dict]:
+    with _get_connection_and_cursor(return_dict=True) as (_, cursor):
+        cursor.execute('SELECT type, total_value FROM transactions')
+        return cursor.fetchall()

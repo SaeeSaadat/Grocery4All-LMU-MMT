@@ -92,6 +92,10 @@ class Product:
         return transaction_db.get_product_sold_count(self.product_id) or 0
 
     def get_sold_value(self) -> float:
+        """
+        This will calculate how much money has been made by selling the product.
+        :return: revenue made by selling the product
+        """
         return transaction_db.get_product_sold_value(self.product_id) or 0
 
     def get_how_many_purchased(self) -> int:
@@ -100,7 +104,7 @@ class Product:
     def get_purchased_value(self) -> float:
         return transaction_db.get_product_purchased_value(self.product_id) or 0
 
-    def get_total_balance(self) -> float:
+    def get_total_profit(self) -> float:
         """
         This will calculate how much money has been spent buying (restocking) the product
         vs how much profit has been made by selling the product.
@@ -116,9 +120,9 @@ class Product:
         description += f"\tSelling Price: {self.selling_price}\n"
         description += f"\tTotal Number Of Units Sold: {self.get_how_many_sold()}\n"
         description += f"\tTotal Number Of Units Purchased: {self.get_how_many_purchased()}\n"
-        description += f"\tTotal Profit: {self.get_sold_value()}$\n"
+        description += f"\tTotal Revenue: {self.get_sold_value()}$\n"
         description += f"\tTotal Purchase Cost: {self.get_purchased_value()}$\n"
-        description += f"\tTotal Balance: {self.get_total_balance()}$"
+        description += f"\tTotal Profit: {self.get_total_profit()}$"
         return description
 
 
